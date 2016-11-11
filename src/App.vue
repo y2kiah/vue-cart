@@ -29,7 +29,7 @@
 
 	export default {
 		name: 'App',
-		
+
 		components: { Navbar, CartItems, PurchaseSummary },
 
 		data() {
@@ -80,9 +80,10 @@
 				wishList: [],
 
 				user: {
-					firstName: "Jeff",
-					lastName: "Jeff",
-					email: "kiahj@erau.edu"
+					authenticated: false,
+					//firstName: "Jeff",
+					//lastName: "Jeff",
+					//email: "kiahj@erau.edu"
 				}
 			};
 		}

@@ -2,18 +2,21 @@
 	<li>
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<a href="#" class="pull-right" @click="removeItemClick($event, index)">
-					<i class="glyphicon glyphicon-remove"></i> Remove from cart
-				</a>
-				<a href="#" class="pull-right wish-list" @click="moveToWishListClick($event, index)">
-					<i class="glyphicon glyphicon glyphicon-heart-empty"></i> Move to wish list
-				</a>
+				<div class="pull-right">
+					<a href="#" class="wish-list" @click="moveToWishListClick($event, index)">
+						<i class="glyphicon glyphicon glyphicon-heart-empty"></i> Save for later
+					</a>
+					<a href="#" @click="removeItemClick($event, index)">
+						<i class="glyphicon glyphicon-remove"></i> Delete
+					</a>
+				</div>
+				
 				<h4>ITEM {{ index+1 }}</h4>
 
 				<h2>{{item.name}}</h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
-				<Attendees :item="item" :user="user" />
+				<Attendees :item="item" :index="index" :user="user" />
 			</div>
 		</div>
 	</li>
@@ -30,22 +33,33 @@
 
 		components: { CourseOfferings, Attendees },
 
-		data () {
+		data() {
 			return {
-				collapsed: false
+				collapsed: false,
+				selectedOffering: null
 			};
 		},
 
-		computed: {},
+		computed: {
+		},
 
 		methods: {
 			removeItemClick(e, index) {
 				e.preventDefault();
 				this.items.splice(index, 1);
 			},
-			
-			moveToWishListClick() {
 
+			moveToWishListClick(e, index) {
+				e.preventDefault();
+				let i = this.items.splice(index, 1);
+				this.wishList.push(i[0]);
+			},
+
+			selectedOfferingText() {
+				let o = this.item.offerings.find((o) => { return o.id === this.selectedOffering; });
+				return (this.selectedOffering !== null)
+					? o.date + ', ' + o.location
+					: '';
 			}
 		}
 	};

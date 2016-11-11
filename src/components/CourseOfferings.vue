@@ -1,15 +1,21 @@
 <template>
-	<div class="panel panel-default">
+	<div :class="['panel', 'panel-default', { 'panel-success': collapsed && valid }]">
 		<div class="panel-body">
-			<a href="#" class="pull-right" @click="editClick" v-show="collapsed">
-				Edit <i class="glyphicon glyphicon-chevron-right"></i>
-			</a>
-			<h4>Course Offerings</h4>
-			
-			<div v-show="collapsed">
-				{{ selectedOfferingText }}
+			<div class="pull-right">
+				<a href="#" @click="editClick" v-if="collapsed">
+					Edit <i class="glyphicon glyphicon-chevron-right"></i>
+				</a>
+				<a href="#" @click.prevent="collapsed=true" v-if="!collapsed && valid">
+					Done
+				</a>
 			</div>
-			
+
+			<h4>Course Offering</h4>
+
+			<div v-show="collapsed" class="lead">
+				{{ $parent.selectedOfferingText() }}
+			</div>
+
 			<div v-show="!collapsed" class="table-responsive">
 				<table class="table table-default">
 					<thead>
@@ -29,11 +35,11 @@
 							<td>
 								<div class="radio">
 									<label>
-										<input type="radio" :name="'items[' + index + '][offering]'" :id="'offering_' + offering.id" :value="offering.id"
-												@click="offeringClick($event, offering.id)">
+										<input type="radio" :name="'items['+index+'][offering]'" :id="'offering_' + offering.id" :value="offering.id"
+												@click="offeringClick($event)" v-model="$parent.selectedOffering">
 										{{offering.date}}
 									</label>
-								</div>	
+								</div>
 							</td>
 							<td>{{ offering.length }}</td>
 							<td>{{ offering.location }}</td>
@@ -43,9 +49,9 @@
 					</tbody>
 				</table>
 			</div>
-			
-			<a href="#" class="pull-right" @click="cloneItemClick($event, index)">
-				<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add another Date/Location for this course 
+
+			<a href="#" class="" v-show="valid" @click="cloneItemClick($event, index)">
+				<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add another Date/Location for this course
 			</a>
 		</div>
 	</div>
@@ -58,19 +64,13 @@
 
 		data () {
 			return {
-				collapsed: false,
-				selected: null
+				collapsed: false
 			};
 		},
 
 		computed: {
-			selectedOfferingText() {
-				console.log(this.item.offerings)
-				console.log(this.selected)
-				let o = this.item.offerings.find((o) => { return o.id === this.selected; });
-				return (this.selected !== null)
-					? o.date + ', ' + o.location
-					: '';
+			valid() {
+				return (this.$parent.selectedOffering !== null);
 			},
 
 			offeringsFootnoteText() {
@@ -86,8 +86,7 @@
 				this.collapsed = false;
 			},
 
-			offeringClick(e, id) {
-				this.selected = id;
+			offeringClick(e) {
 				this.collapsed = true;
 			},
 
@@ -112,7 +111,7 @@
 
 				// find the matching discount
 				let pos = ud.findIndex((d) => { return d.id === discountId; });
-				
+
 				// fill a string of '*' based on position
 				return '*'.repeat(pos+1);
 			},
@@ -135,5 +134,11 @@
 <style lang="css" scoped>
 	.table > tbody > tr > td {
 		vertical-align: middle;
+	}
+	h4 {
+		margin: 0 0 10px 0;
+	}
+	.panel-success {
+		background-color: #f0f8ed;
 	}
 </style>

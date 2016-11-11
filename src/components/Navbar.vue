@@ -31,7 +31,7 @@
 							<li><a href="#">Separated link</a></li>-->
 						</ul>
 					</li>
-					
+
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="glyphicon glyphicon-shopping-cart"></i>
@@ -45,7 +45,7 @@
 						</ul>
 					</li>
 
-					<li><a href="#">Hello, {{ user.firstName }}</a></li>
+					<li><a href="#">Hello, {{ user.firstName || 'Guest' }}</a></li>
 				</ul>
 			</div>
 		</div>
