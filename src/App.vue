@@ -80,10 +80,10 @@
 				wishList: [],
 
 				user: {
-					authenticated: false,
-					//firstName: "Jeff",
-					//lastName: "Jeff",
-					//email: "kiahj@erau.edu"
+					authenticated: true,
+					firstName: "Jeff",
+					lastName: "Kiah",
+					email: "kiahj@erau.edu"
 				}
 			};
 		}

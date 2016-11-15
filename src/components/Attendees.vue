@@ -25,10 +25,14 @@
 					<div class="col-xs-12">
 						<ul class="list-unstyled">
 							<li v-for="(attendee, index) in attendees">
-								<Attendee :attendee="attendee" :index="index" :user="user"></Attendee>
+								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user"></Attendee>
 							</li>
 						</ul>
-						<a href="#"><i class="glyphicon glyphicon-user"></i>+ Add an attendee</a>
+						<ul class="list-unstyled">
+							<li><a href="#">Register myself</a></li>
+							<li><a href="#">Add a new attendee</a></li>
+							<li><a href="#">Add an attendee previously registered</a></li>
+						</ul>
 					</div>
 					<!--<div class="col-xs-3">
 						<div class="input-group">
@@ -55,7 +59,7 @@
 
 		name: 'Attendees',
 
-		props: [ 'item', 'index', 'user' ],
+		props: [ 'item', 'itemIndex', 'user' ],
 
 		components: { Attendee, Note },
 
@@ -74,7 +78,7 @@
 		},
 
 		created: function() {
-			this.attendees.push( _.merge(this.user, { isUser:true }));
+			this.attendees.push(_.merge(this.user, { isUser:true }));
 		},
 
 		methods: {

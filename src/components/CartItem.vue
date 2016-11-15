@@ -16,7 +16,7 @@
 				<h2>{{item.name}}</h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
-				<Attendees :item="item" :index="index" :user="user" />
+				<Attendees :item="item" :itemIndex="index" :user="user" />
 			</div>
 		</div>
 	</li>
