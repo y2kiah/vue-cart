@@ -10,7 +10,7 @@
 				</a>
 			</div>
 
-			<h4>Attendees ({{ this.attendees.length }})</h4>
+			<h4>Attendees ({{ attendees.length }})</h4>
 
 			<div v-show="collapsed">
 				{{ summaryText }}
@@ -25,14 +25,11 @@
 					<div class="col-xs-12">
 						<ul class="list-unstyled">
 							<li v-for="(attendee, index) in attendees">
-								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user"></Attendee>
+								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user" :validAttendees="validAttendees"></Attendee>
 							</li>
 						</ul>
-						<ul class="list-unstyled">
-							<li><a href="#">Register myself</a></li>
-							<li><a href="#">Add a new attendee</a></li>
-							<li><a href="#">Add an attendee previously registered</a></li>
-						</ul>
+						<hr>
+						<a href="#"><i class="glyphicon glyphicon-user"></i>+ Register another attendee</a></li>
 					</div>
 					<!--<div class="col-xs-3">
 						<div class="input-group">
@@ -59,14 +56,13 @@
 
 		name: 'Attendees',
 
-		props: [ 'item', 'itemIndex', 'user' ],
+		props: [ 'item', 'itemIndex', 'user', 'attendees' ],
 
 		components: { Attendee, Note },
 
 		data () {
 			return {
 				collapsed: false,
-				attendees: [],
 				validAttendees: []
 			};
 		},
@@ -78,7 +74,7 @@
 		},
 
 		created: function() {
-			this.attendees.push(_.merge(this.user, { isUser:true }));
+			
 		},
 
 		methods: {

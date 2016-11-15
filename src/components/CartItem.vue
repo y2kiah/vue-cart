@@ -16,7 +16,7 @@
 				<h2>{{item.name}}</h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
-				<Attendees :item="item" :itemIndex="index" :user="user" />
+				<Attendees :item="item" :itemIndex="index" :user="user" :attendees="attendees" />
 			</div>
 		</div>
 	</li>
@@ -36,7 +36,8 @@
 		data() {
 			return {
 				collapsed: false,
-				selectedOffering: null
+				selectedOffering: null,
+				attendees: []
 			};
 		},
 
@@ -55,12 +56,21 @@
 				this.wishList.push(i[0]);
 			},
 
+			addAttendeeClick(e, index) {
+				this.attendees.push({});
+				//_.merge(this.user, { isUser:true })
+			},
+
 			selectedOfferingText() {
 				let o = this.item.offerings.find((o) => { return o.id === this.selectedOffering; });
 				return (this.selectedOffering !== null)
 					? o.date + ', ' + o.location
 					: '';
 			}
+		},
+
+		created: function() {
+			this.attendees.push({});
 		}
 	};
 </script>

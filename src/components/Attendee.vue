@@ -7,14 +7,13 @@
 			<h4>Register an Existing Attendee</h4>
 			<div class="row">
 				<div class="col-md-4">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<span class="text-success">CURRENT USER</span><br>
-							{{ user.firstName }} {{ user.lastName }}
-						</div>
-					</div>
+					<button class="btn btn-default col-xs-12 user-selection">
+						<span class="text-success">CURRENT USER</span><br>
+						{{ user.firstName }} {{ user.lastName }}<br>
+						{{ user.email }}
+					</button>
 				</div>
-				<div v-for="n in 4" class="col-md-4">
+				<div v-for="attendee in attendees" class="col-md-4">
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<span class="text-info">ATTENDEE</span><br>
@@ -23,6 +22,7 @@
 				</div>
 			</div>
 			<hr>
+			&ndash; Or &ndash;
 			<h4>Create New Attendee</h4>
 			<div class="row">
 				<div class="form-group col-md-5">
@@ -120,7 +120,7 @@
 	export default {
 		name: 'Attendee',
 
-		props: [ 'attendee', 'index', 'itemIndex', 'user' ],
+		props: [ 'attendee', 'index', 'itemIndex', 'user', 'attendees' ],
 
 		data() {
 			return {
@@ -136,4 +136,7 @@
 </script>
 
 <style lang="css" scoped>
+	button.user-selection {
+		text-align: left;
+	}
 </style>
