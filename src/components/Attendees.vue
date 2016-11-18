@@ -18,7 +18,7 @@
 			
 			<div v-show="!collapsed">
 				<div>
-					Who will be attending &ldquo;{{ item.name }}&rdquo;{{ $parent.selectedOffering !== null ? ' - ' + $parent.selectedOfferingText() : '' }}?
+					Who will be attending &ldquo;{{ item.name }}&rdquo;{{ $parent.selectedOfferingId !== null ? ' - ' + $parent.selectedOfferingText() : '' }}?
 					<Note>Number of attendees problem with removing</Note>
 				</div>
 				<div class="row">

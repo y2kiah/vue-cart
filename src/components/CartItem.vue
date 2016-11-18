@@ -17,6 +17,17 @@
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
 				<Attendees :item="item" :itemIndex="index" :user="user" :attendees="attendees" />
+
+				<div class="pull-right text-right" v-if="selectedOffering !== null">
+					{{ attendees.length }} &times; ${{ selectedOffering.cost }}
+					<div>
+						&ndash;
+					</div>
+					<div class="subtotal">
+						<span>Subtotal:</span>
+						${{ subtotal }}
+					</div>
+				</div>
 			</div>
 		</div>
 	</li>
@@ -36,12 +47,20 @@
 		data() {
 			return {
 				collapsed: false,
-				selectedOffering: null,
+				selectedOfferingId: null,
 				attendees: []
 			};
 		},
 
 		computed: {
+			selectedOffering() {
+				let o = this.item.offerings.find((o) => { return o.id === this.selectedOfferingId; });
+				return o || null;
+			},
+
+			subtotal() {
+				return this.selectedOffering.cost * this.attendees.length * 1;
+			}
 		},
 
 		methods: {
@@ -62,8 +81,8 @@
 			},
 
 			selectedOfferingText() {
-				let o = this.item.offerings.find((o) => { return o.id === this.selectedOffering; });
-				return (this.selectedOffering !== null)
+				let o = this.selectedOffering;
+				return (o !== null)
 					? o.date + ', ' + o.location
 					: '';
 			}
@@ -81,5 +100,13 @@
 	}
 	h4 {
 		margin: 0;
+	}
+	.subtotal {
+		font-size: 1.2em;
+		font-weight: bold;
+		border-top: 1px solid #ccc;
+	}
+	.subtotal > span {
+		margin-right: 15px;
 	}
 </style>

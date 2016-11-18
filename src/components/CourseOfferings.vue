@@ -36,7 +36,7 @@
 								<div class="radio">
 									<label>
 										<input type="radio" :name="'items['+index+'][offering]'" :id="'offering_' + offering.id" :value="offering.id"
-												@click="offeringClick($event)" v-model="$parent.selectedOffering">
+												@click="offeringClick($event)" v-model="$parent.selectedOfferingId">
 										{{offering.date}}
 									</label>
 								</div>
@@ -70,7 +70,7 @@
 
 		computed: {
 			valid() {
-				return (this.$parent.selectedOffering !== null);
+				return (this.$parent.selectedOfferingId !== null);
 			},
 
 			offeringsFootnoteText() {
