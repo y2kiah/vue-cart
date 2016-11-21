@@ -45,7 +45,7 @@
 						</ul>
 					</li>
 
-					<li><a href="#">Hello, {{ user.firstName || 'Guest' }}</a></li>
+					<li><a href="#">Hello, {{ user.firstname || 'Guest' }}</a></li>
 				</ul>
 			</div>
 		</div>

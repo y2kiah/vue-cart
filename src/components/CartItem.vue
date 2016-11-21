@@ -28,6 +28,7 @@
 						${{ subtotal }}
 					</div>
 				</div>
+				<Note><pre>{{ $data }}</pre></Note>
 			</div>
 		</div>
 	</li>
@@ -36,13 +37,14 @@
 <script>
 	import CourseOfferings from './CourseOfferings'
 	import Attendees from './Attendees'
+	import Note from './Note'
 
 	export default {
 		name: 'CartItem',
 
 		props: [ 'item', 'index', 'items', 'discounts', 'wishList', 'user' ],
 
-		components: { CourseOfferings, Attendees },
+		components: { CourseOfferings, Attendees, Note },
 
 		data() {
 			return {
@@ -64,6 +66,15 @@
 		},
 
 		methods: {
+			addAttendee(attendee) {
+				if (attendee === undefined) {
+					attendee = { valid:false };
+				}
+				
+				this.attendees.push(attendee);
+				//_.merge(this.user, { isUser:true })
+			},
+
 			removeItemClick(e, index) {
 				e.preventDefault();
 				this.items.splice(index, 1);
@@ -76,8 +87,7 @@
 			},
 
 			addAttendeeClick(e, index) {
-				this.attendees.push({});
-				//_.merge(this.user, { isUser:true })
+				this.addAttendee();
 			},
 
 			selectedOfferingText() {
@@ -89,7 +99,9 @@
 		},
 
 		created: function() {
-			this.attendees.push({});
+			this.$on('addAttendee', (attendee) => addAttendee(attendee));
+
+			this.addAttendee();
 		}
 	};
 </script>

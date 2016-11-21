@@ -49,8 +49,9 @@
 					</tbody>
 				</table>
 			</div>
-
-			<a href="#" class="" v-show="valid" @click="cloneItemClick($event, index)">
+		</div>
+		<div class="panel-footer" v-show="valid">
+			<a href="#" class="" @click="cloneItemClick($event, index)">
 				<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add another Date/Location for this course
 			</a>
 		</div>
@@ -135,10 +136,17 @@
 	.table > tbody > tr > td {
 		vertical-align: middle;
 	}
+	
 	h4 {
 		margin: 0 0 10px 0;
 	}
+	
 	.panel-success {
 		background-color: #f0f8ed;
+	}
+
+	.panel-footer {
+		background-color: inherit;
+		border-color: inherit;
 	}
 </style>

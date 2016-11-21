@@ -1,35 +1,19 @@
 <template>
-	<div class="panel panel-default">
+	<div :class="['panel', 'panel-default', { 'panel-success': collapsed && valid }]">
 		<div class="panel-body">
-			<div class="pull-right">
-				<a href="#" @click="editClick" v-if="collapsed">
-					Edit <i class="glyphicon glyphicon-chevron-right"></i>
-				</a>
-				<a href="#" @click.prevent="collapsed=true" v-if="!collapsed && validAttendees.length">
-					Done
-				</a>
-			</div>
-
 			<h4>Attendees ({{ attendees.length }})</h4>
 
-			<div v-show="collapsed">
-				{{ summaryText }}
-			</div>
-			
-			<div v-show="!collapsed">
+			<div>
 				<div>
 					Who will be attending &ldquo;{{ item.name }}&rdquo;{{ $parent.selectedOfferingId !== null ? ' - ' + $parent.selectedOfferingText() : '' }}?
-					<Note>Number of attendees problem with removing</Note>
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
 						<ul class="list-unstyled">
 							<li v-for="(attendee, index) in attendees">
-								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user" :validAttendees="validAttendees"></Attendee>
+								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user" :attendees="attendees"></Attendee>
 							</li>
 						</ul>
-						<hr>
-						<a href="#"><i class="glyphicon glyphicon-user"></i>+ Register another attendee</a></li>
 					</div>
 					<!--<div class="col-xs-3">
 						<div class="input-group">
@@ -44,6 +28,11 @@
 				</div>
 			</div>
 
+		</div>
+		<div class="panel-footer" v-show="valid">
+			<a href="#" class="" @click="$emit('addAttendee')">
+				<i class="glyphicon glyphicon-user"></i>+ Register another attendee
+			</a>
 		</div>
 	</div>
 </template>
@@ -62,26 +51,22 @@
 
 		data () {
 			return {
-				collapsed: false,
-				validAttendees: []
 			};
 		},
 
 		computed: {
-			summaryText() {
-				return '';
-			}
-		},
+			collapsed() {
+				console.log(this.$children)
+				return true;//this.children.findIndex() .$data.collapsed
+			},
 
-		created: function() {
-			
+			valid() {
+				return (this.attendees.length > 0
+						&& this.attendees.findIndex(a => !a.valid) === -1);
+			}
 		},
 
 		methods: {
-			editClick(e) {
-				e.preventDefault();
-				this.collapsed = false;
-			}
 		}
 	};
 </script>
@@ -89,5 +74,14 @@
 <style lang="css" scoped>
 	h4 {
 		margin: 0 0 10px 0;
+	}
+
+	.panel-success {
+		background-color: #f0f8ed;
+	}
+
+	.panel-footer {
+		background-color: inherit;
+		border-color: inherit;
 	}
 </style>

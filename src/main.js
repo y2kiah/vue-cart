@@ -2,6 +2,7 @@ window.$ = window.jQuery = require('jquery');
 require('bootstrap/dist/css/bootstrap.css');
 require('bootstrap');
 window._ = require('lodash');
+window.moment = require('moment');
 
 import Vue from 'vue';
 import App from './App';

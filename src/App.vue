@@ -11,14 +11,14 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-9">
+			<div class="col-md-9 clearfix">
 				<CartItems :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItems>
+				<Note><pre>{{ $data }}</pre></Note><br><br>
 			</div>
 			<div class="col-md-3">
 				<PurchaseSummary :items="items" :discounts="discounts"></PurchaseSummary>
 			</div>
 		</div>
-		<pre>{{ $data }}</pre>
 	</div>
 </template>
 
@@ -26,11 +26,12 @@
 	import Navbar from './components/Navbar'
 	import CartItems from './components/CartItems'
 	import PurchaseSummary from './components/PurchaseSummary'
+	import Note from './components/Note'
 
 	export default {
 		name: 'App',
 
-		components: { Navbar, CartItems, PurchaseSummary },
+		components: { Navbar, CartItems, PurchaseSummary, Note },
 
 		data() {
 			return {
@@ -81,9 +82,20 @@
 
 				user: {
 					authenticated: true,
-					firstName: "Jeff",
-					lastName: "Kiah",
-					email: "kiahj@erau.edu"
+					firstname: "Jeff",
+					middleinitial: "J",
+					lastname: "Kiah",
+					email: "kiahj@erau.edu",
+					phone: "386-226-7047",
+					dob: "09/06/1981",
+					erauid: "0660215",
+					companyname: "ERAU",
+					jobtitle: "Manager of Applications Development and Integration",
+					address: "600 S. Clyde Morris Blvd.",
+					city: "Daytona Beach",
+					state: "FL",
+					//zip: "32114",
+					country: "United States of America"
 				}
 			};
 		}
