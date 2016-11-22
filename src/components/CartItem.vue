@@ -72,12 +72,11 @@
 				}
 				
 				this.attendees.push(attendee);
-				//_.merge(this.user, { isUser:true })
 			},
 
 			removeItemClick(e, index) {
 				e.preventDefault();
-				this.items.splice(index, 1);
+				bus.$emit('removeItem', index);
 			},
 
 			moveToWishListClick(e, index) {
@@ -99,7 +98,9 @@
 		},
 
 		created: function() {
-			this.$on('addAttendee', (attendee) => addAttendee(attendee));
+			bus.$on('addAttendee', (attendee) => {
+				this.addAttendee(attendee);
+			});
 
 			this.addAttendee();
 		}
@@ -110,6 +111,7 @@
 	a.wish-list {
 		margin-right: 30px;
 	}
+
 	h4 {
 		margin: 0;
 	}

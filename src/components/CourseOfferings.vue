@@ -93,8 +93,7 @@
 
 			cloneItemClick(e, index) {
 				e.preventDefault();
-				let copy = _.cloneDeep(this.items[index]);
-				this.items.splice(index, 0, copy);
+				bus.$emit('cloneItem', index);
 			},
 
 			uniqueDiscountsWithFootnote() {

@@ -1,24 +1,26 @@
 <template>
 	<div>
 		<div v-show="collapsed" class="lead">
-			<a href="#">{{ attendee.firstname }} {{ attendee.lastname }}</a>
+			<a href="#">{{ attendee.firstname }} {{ attendee.lastname }},
+				<small>{{ user.email }} <i class="glyphicon glyphicon-chevron-right"></i></small>
+			</a>
 		</div>
 		<div v-show="!collapsed">
 			<h4>Register an Existing Attendee</h4>
 			<div class="row">
 				<div class="col-md-4">
-					<button class="btn btn-default col-xs-12 user-selection" @click="copyUserToForm">
+					<button class="btn btn-default col-xs-12 user-selection" @click="copyUserToForm(user)">
 						<span class="text-success">CURRENT USER</span><br>
 						{{ user.firstname }} {{ user.lastname }}<br>
 						{{ user.email }}
 					</button>
 				</div>
-				<div v-for="attendee in attendees" class="col-md-4">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<span class="text-info">ATTENDEE</span><br>
-						</div>
-					</div>
+				<div v-for="attendee in validAttendees" class="col-md-4">
+					<button class="btn btn-default col-xs-12 user-selection" @click="copyUserToForm(attendee)">
+						<span class="text-info">ATTENDEE</span><br>
+						{{ attendee.firstname }} {{ attendee.lastname }}<br>
+						{{ attendee.email }}
+					</button>
 				</div>
 			</div>
 			<hr>
@@ -52,7 +54,7 @@
 					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('email',formScope)}]">
 						<label class="control-label" :for="'email_'+itemIndex+'_'+index">Email</label>
 						<input type="email" name="email" :id="'email_'+itemIndex+'_'+index" class="form-control"
-							   v-model="email" v-validate data-rules="required|email">
+							   v-model.lazy="email" v-validate data-rules="required|email">{{ email }}
 
 						<span v-show="errors.has('email',formScope)" class="help-block">{{ errors.first('email',formScope) }}</span>
 					</div>
@@ -185,14 +187,18 @@
 		},
 
 		computed: {
+			validAttendees() {
+				return this.attendees.filter(a => a.valid);
+			},
+
 			formScope() {
 				return 'attendee-form-' + this.itemIndex;
 			}
 		},
 
 		methods: {
-			copyUserToForm() {
-				_.forOwn(this.user, (value, key) => {
+			copyUserToForm(userData) {
+				_.forOwn(userData, (value, key) => {
 					if (_.has(this, key)) {
 						this[key] = value;
 					}

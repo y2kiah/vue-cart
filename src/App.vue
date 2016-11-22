@@ -23,10 +23,11 @@
 </template>
 
 <script>
-	import Navbar from './components/Navbar'
-	import CartItems from './components/CartItems'
-	import PurchaseSummary from './components/PurchaseSummary'
-	import Note from './components/Note'
+	import Vue from 'vue';
+	import Navbar from './components/Navbar';
+	import CartItems from './components/CartItems';
+	import PurchaseSummary from './components/PurchaseSummary';
+	import Note from './components/Note';
 
 	export default {
 		name: 'App',
@@ -42,8 +43,11 @@
 					footnote: 'Discount applied at checkout for registering more than 60 days early'
 				}],
 
+				nextUniqueId: 2,
+
 				items: [
 				{
+					uniqueId: 0,
 					id: 0,
 					name: 'History & Application of sUAS',
 					offerings: [
@@ -65,6 +69,7 @@
 					}]
 				},
 				{
+					uniqueId: 1,
 					id: 1,
 					name: 'sUAS Design & Configuration',
 					offerings: [
@@ -94,10 +99,35 @@
 					address: "600 S. Clyde Morris Blvd.",
 					city: "Daytona Beach",
 					state: "FL",
-					//zip: "32114",
+					zip: "32114",
 					country: "United States of America"
 				}
 			};
+		},
+
+		methods: {
+			cloneItem(index) {
+				let copy = JSON.parse(JSON.stringify(this.items[index]));
+				copy.uniqueId = this.nextUniqueId++;
+				this.items.push(copy);
+			},
+
+			removeItem(index) {
+				console.log(JSON.parse(JSON.stringify(this.items)))
+				this.items.splice(index, 1);
+				console.log(JSON.parse(JSON.stringify(this.items)))
+			}
+
+		},
+
+		created() {
+			bus.$on('cloneItem', (index) => {
+				this.cloneItem(index);
+			});
+
+			bus.$on('removeItem', (index) => {
+				this.removeItem(index);
+			});
 		}
 	}
 </script>

@@ -12,9 +12,13 @@ Vue.use(VeeValidate);
 
 /* eslint-disable no-new */
 
+window.bus = new Vue();
+
 new Vue({
 	el: '#app',
+
 	components: { App },
+	
 	data() {
 		return {
 		};

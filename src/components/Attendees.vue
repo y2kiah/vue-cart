@@ -15,22 +15,12 @@
 							</li>
 						</ul>
 					</div>
-					<!--<div class="col-xs-3">
-						<div class="input-group">
-							<input type="text" :name="'items['+index+'][numAttendees]'" class="form-control"
-								   v-model="numAttendees" required="required" pattern="[0-9]*">
-							<div class="input-group-btn">
-						    	<button type="button" class="btn btn-default" @click="numAttendees -= numAttendees <= 1 ? 0 : 1">-</button>
-						    	<button type="button" class="btn btn-default" @click="++numAttendees">+</button>
-							</div>
-						</div>
-					</div>-->
 				</div>
 			</div>
 
 		</div>
 		<div class="panel-footer" v-show="valid">
-			<a href="#" class="" @click="$emit('addAttendee')">
+			<a href="#" class="" @click="addAttendeeClick">
 				<i class="glyphicon glyphicon-user"></i>+ Register another attendee
 			</a>
 		</div>
@@ -67,6 +57,10 @@
 		},
 
 		methods: {
+			addAttendeeClick(e) {
+				e.preventDefault();
+				bus.$emit('addAttendee');
+			}
 		}
 	};
 </script>
