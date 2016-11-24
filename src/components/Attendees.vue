@@ -59,7 +59,7 @@
 		methods: {
 			addAttendeeClick(e) {
 				e.preventDefault();
-				bus.$emit('addAttendee');
+				this.$parent.addAttendee();
 			}
 		}
 	};

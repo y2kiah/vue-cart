@@ -11,11 +11,10 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-9 clearfix">
+			<div class="col-md-8 col-lg-9 clearfix">
 				<CartItems :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItems>
-				<Note><pre>{{ $data }}</pre></Note><br><br>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4 col-lg-3">
 				<PurchaseSummary :items="items" :discounts="discounts"></PurchaseSummary>
 			</div>
 		</div>
@@ -113,20 +112,15 @@
 			},
 
 			removeItem(index) {
-				console.log(JSON.parse(JSON.stringify(this.items)))
+				console.log(index)
 				this.items.splice(index, 1);
-				console.log(JSON.parse(JSON.stringify(this.items)))
 			}
 
 		},
-
+		
 		created() {
 			bus.$on('cloneItem', (index) => {
 				this.cloneItem(index);
-			});
-
-			bus.$on('removeItem', (index) => {
-				this.removeItem(index);
 			});
 		}
 	}

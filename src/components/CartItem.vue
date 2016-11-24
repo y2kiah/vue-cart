@@ -28,7 +28,6 @@
 						${{ subtotal }}
 					</div>
 				</div>
-				<Note><pre>{{ $data }}</pre></Note>
 			</div>
 		</div>
 	</li>
@@ -50,7 +49,8 @@
 			return {
 				collapsed: false,
 				selectedOfferingId: null,
-				attendees: []
+				attendees: [],
+				nextAttendeeId: 0
 			};
 		},
 
@@ -61,22 +61,23 @@
 			},
 
 			subtotal() {
-				return this.selectedOffering.cost * this.attendees.length * 1;
+				return (this.selectedOffering ? this.selectedOffering.cost : 0) * this.attendees.length * 1;
 			}
 		},
 
 		methods: {
 			addAttendee(attendee) {
 				if (attendee === undefined) {
-					attendee = { valid:false };
+					attendee = { valid: false };
 				}
 				
+				attendee.uniqueId = this.nextAttendeeId++;
 				this.attendees.push(attendee);
 			},
 
 			removeItemClick(e, index) {
 				e.preventDefault();
-				bus.$emit('removeItem', index);
+				this.$parent.removeItem(index);
 			},
 
 			moveToWishListClick(e, index) {
@@ -98,10 +99,6 @@
 		},
 
 		created: function() {
-			bus.$on('addAttendee', (attendee) => {
-				this.addAttendee(attendee);
-			});
-
 			this.addAttendee();
 		}
 	};

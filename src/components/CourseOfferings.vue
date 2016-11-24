@@ -12,11 +12,11 @@
 
 			<h4>Course Offering</h4>
 
-			<div v-show="collapsed" class="lead">
+			<div v-show="collapsed && valid" class="lead">
 				{{ $parent.selectedOfferingText() }}
 			</div>
 
-			<div v-show="!collapsed" class="table-responsive">
+			<div v-show="!(collapsed && valid)" class="table-responsive">
 				<table class="table table-default">
 					<thead>
 						<tr>
@@ -31,12 +31,12 @@
 						<tr><td colspan="5">{{ offeringsFootnoteText }}</td></tr>
 					</tfoot>
 					<tbody>
-						<tr v-for="offering in item.offerings" :key="offering.id">
+						<tr v-for="offering in item.offerings">
 							<td>
 								<div class="radio">
 									<label>
 										<input type="radio" :name="'items['+index+'][offering]'" :id="'offering_' + offering.id" :value="offering.id"
-												@click="offeringClick($event)" v-model="$parent.selectedOfferingId">
+												@click="offeringClick" v-model="$parent.selectedOfferingId">
 										{{offering.date}}
 									</label>
 								</div>
@@ -88,7 +88,7 @@
 			},
 
 			offeringClick(e) {
-				this.collapsed = true;
+				setTimeout(() => this.collapsed = true, 0);
 			},
 
 			cloneItemClick(e, index) {

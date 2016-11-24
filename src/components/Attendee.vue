@@ -8,14 +8,14 @@
 		<div v-show="!collapsed">
 			<h4>Register an Existing Attendee</h4>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-sm-4 col-xs-6">
 					<button class="btn btn-default col-xs-12 user-selection" @click="copyUserToForm(user)">
 						<span class="text-success">CURRENT USER</span><br>
 						{{ user.firstname }} {{ user.lastname }}<br>
 						{{ user.email }}
 					</button>
 				</div>
-				<div v-for="attendee in validAttendees" class="col-md-4">
+				<div v-for="attendee in validAttendees" :key="attendee.uniqueId" class="col-sm-4 col-xs-6">
 					<button class="btn btn-default col-xs-12 user-selection" @click="copyUserToForm(attendee)">
 						<span class="text-info">ATTENDEE</span><br>
 						{{ attendee.firstname }} {{ attendee.lastname }}<br>
@@ -53,14 +53,14 @@
 				<div class="row">
 					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('email',formScope)}]">
 						<label class="control-label" :for="'email_'+itemIndex+'_'+index">Email</label>
-						<input type="email" name="email" :id="'email_'+itemIndex+'_'+index" class="form-control"
+						<input type="text" name="email" :id="'email_'+itemIndex+'_'+index" class="form-control"
 							   v-model.lazy="email" v-validate data-rules="required|email">{{ email }}
 
 						<span v-show="errors.has('email',formScope)" class="help-block">{{ errors.first('email',formScope) }}</span>
 					</div>
 					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('phone',formScope)}]">
 						<label class="control-label" :for="'phone_'+itemIndex+'_'+index">Phone</label>
-						<input type="tel" name="phone" :id="'phone_'+itemIndex+'_'+index" class="form-control"
+						<input type="text" name="phone" :id="'phone_'+itemIndex+'_'+index" class="form-control"
 							   v-model="phone" v-validate data-rules="required" data-as="phone number">
 
 						<span v-show="errors.has('phone',formScope)" class="help-block">{{ errors.first('phone',formScope) }}</span>
@@ -69,7 +69,7 @@
 				<div class="row">
 					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('dob',formScope)}]">
 						<label class="control-label" :for="'dob_'+itemIndex+'_'+index">Date of Birth</label>
-						<input type="date" name="dob" :id="'dob_'+itemIndex+'_'+index" class="form-control"
+						<input type="text" name="dob" :id="'dob_'+itemIndex+'_'+index" class="form-control"
 							   v-model="dob" v-validate data-rules="required|date_format:MM/DD/YYYY" placeholder="MM/DD/YYYY" data-as="date of birth">
 
 						<span v-show="errors.has('dob',formScope)" class="help-block">{{ errors.first('dob',formScope) }}</span>
@@ -191,6 +191,10 @@
 				return this.attendees.filter(a => a.valid);
 			},
 
+			validAttendeesNotAdded() {
+				return _.difference(validAttendees(), )
+			},
+
 			formScope() {
 				return 'attendee-form-' + this.itemIndex;
 			}
@@ -239,5 +243,6 @@
 <style lang="css" scoped>
 	button.user-selection {
 		text-align: left;
+		margin: 5px 0;
 	}
 </style>

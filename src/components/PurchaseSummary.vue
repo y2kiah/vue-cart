@@ -1,5 +1,5 @@
 <template>
-	<div id="purchaseSummary" data-spy="affix" data-offset-top="145" data-offset-bottom="200">
+	<div id="purchaseSummary" data-spy="affix" data-offset-top="145" data-offset-bottom="0">
 		<div class="well">
 			<h3>Purchase Summary</h3>
 		</div>
@@ -24,14 +24,38 @@
 	h3 {
 		margin: 0;
 	}
-
-	#purchaseSummary.affix {
-		top: 30px;
+	
+	@media(max-width:767px) {
+		#purchaseSummary.affix,
+		#purchaseSummary.affix-top,
+		#purchaseSummary.affix-bottom {
+			position: static;
+		}
 	}
-	#purchaseSummary.affix-top {
-
+	@media(min-width:768px) {
+		#purchaseSummary.affix,
+		#purchaseSummary.affix-top,
+		#purchaseSummary.affix-bottom {
+			position: static;
+		}
 	}
-	#purchaseSummary.affix-bottom {
+	@media(min-width:992px) {
+		#purchaseSummary.affix {
+			position: fixed;
+			top: 30px;
+			width: 293.33px;
+		}
+	}
+	@media(min-width:1200px) {
+		#purchaseSummary.affix {
+			position: fixed;
+			top: 30px;
+			width: 262.5px;
+		}
+	}
 
+	button {
+		text-align: center;
+		white-space: normal;
 	}
 </style>
