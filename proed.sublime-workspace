@@ -71,17 +71,17 @@
 	},
 	"expanded_folders":
 	[
-		"/home/oracle/workspace/proed",
-		"/home/oracle/workspace/proed/build",
-		"/home/oracle/workspace/proed/config",
-		"/home/oracle/workspace/proed/src",
-		"/home/oracle/workspace/proed/src/assets",
-		"/home/oracle/workspace/proed/src/components",
-		"/home/oracle/workspace/proed/static"
+		"/home/oracle/workspace/vue-cart",
+		"/home/oracle/workspace/vue-cart/build",
+		"/home/oracle/workspace/vue-cart/config",
+		"/home/oracle/workspace/vue-cart/src",
+		"/home/oracle/workspace/vue-cart/src/assets",
+		"/home/oracle/workspace/vue-cart/src/components",
+		"/home/oracle/workspace/vue-cart/static"
 	],
 	"file_history":
 	[
-		"/home/oracle/workspace/proed/package.json"
+		"/home/oracle/workspace/vue-cart/package.json"
 	],
 	"find":
 	{
@@ -246,7 +246,7 @@
 		"height": 0.0
 	},
 	"pinned_build_system": "",
-	"project": "proed.sublime-project",
+	"project": "vue-cart.sublime-project",
 	"replace":
 	{
 		"height": 0.0

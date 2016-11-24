@@ -1,6 +1,6 @@
-# proed
+# vue-cart
 
-> Proed mockup
+> vue-cart mockup
 
 ## Build Setup
 
