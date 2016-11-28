@@ -42,7 +42,8 @@
 					footnote: 'Discount applied at checkout for registering more than 60 days early'
 				}],
 
-				nextUniqueId: 2,
+				nextItemId: 2,
+				nextAttendeeId: 0,
 
 				items: [
 				{
@@ -65,7 +66,8 @@
 						location: 'Online',
 						cost: '399',
 						discounts: [0]
-					}]
+					}],
+					attendees: []
 				},
 				{
 					uniqueId: 1,
@@ -79,7 +81,8 @@
 						location: 'Online',
 						cost: '399',
 						discounts: []
-					}]
+					}],
+					attendees: []
 				}],
 
 				wishList: [],
@@ -107,13 +110,43 @@
 		methods: {
 			cloneItem(index) {
 				let copy = JSON.parse(JSON.stringify(this.items[index]));
-				copy.uniqueId = this.nextUniqueId++;
+				copy.uniqueId = this.nextItemId++;
+				copy.attendees.splice(0);
 				this.items.push(copy);
+				this.addAttendee(this.items.length - 1);
 			},
 
 			removeItem(index) {
-				console.log(index)
 				this.items.splice(index, 1);
+			},
+
+			addAttendee(itemIndex, attendee) {
+				if (attendee === undefined) {
+					attendee = {
+						valid: false,
+						firstname: "",
+						middleinitial: "",
+						lastname: "",
+						email: "",
+						phone: "",
+						dob: "",
+						erauid: "",
+						companyname: "",
+						jobtitle: "",
+						address: "",
+						city: "",
+						state: "",
+						zip: "",
+						country: ""
+					};
+				}
+				
+				attendee.uniqueId = this.nextAttendeeId++;
+				this.items[itemIndex].attendees.push(attendee);
+			},
+
+			removeAttendee(itemIndex, attendeeIndex) {
+				this.items[itemIndex].attendees.splice(attendeeIndex, 1);
 			}
 
 		},
@@ -122,6 +155,18 @@
 			bus.$on('cloneItem', (index) => {
 				this.cloneItem(index);
 			});
+
+			bus.$on('addAttendee', (itemIndex, attendee) => {
+				this.addAttendee(itemIndex, attendee);
+			});
+
+			bus.$on('removeAttendee', (itemIndex, attendeeIndex) => {
+				this.removeAttendee(itemIndex, attendeeIndex);
+			});
+
+			for (let i = 0; i < this.items.length; ++i) {
+				this.addAttendee(i);
+			}
 		}
 	}
 </script>

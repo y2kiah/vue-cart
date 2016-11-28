@@ -10,8 +10,9 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<ul class="list-unstyled">
-							<li v-for="(attendee, index) in attendees">
-								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user" :attendees="attendees"></Attendee>
+							<li v-for="(attendee, index) in attendees" :key="attendee.uniqueId" class="attendee">
+								<Attendee :attendee="attendee" :index="index" :itemIndex="itemIndex" :user="user"
+										  :attendees="attendees" :items="items"></Attendee>
 							</li>
 						</ul>
 					</div>
@@ -35,7 +36,7 @@
 
 		name: 'Attendees',
 
-		props: [ 'item', 'itemIndex', 'user', 'attendees' ],
+		props: [ 'item', 'itemIndex', 'user', 'attendees', 'items' ],
 
 		components: { Attendee, Note },
 
@@ -46,7 +47,7 @@
 
 		computed: {
 			collapsed() {
-				console.log(this.$children)
+				//console.log(this.$children)
 				return true;//this.children.findIndex() .$data.collapsed
 			},
 
@@ -59,7 +60,7 @@
 		methods: {
 			addAttendeeClick(e) {
 				e.preventDefault();
-				this.$parent.addAttendee();
+				bus.$emit('addAttendee', this.itemIndex);
 			}
 		}
 	};
@@ -77,5 +78,10 @@
 	.panel-footer {
 		background-color: inherit;
 		border-color: inherit;
+	}
+
+	li.attendee {
+		border-top: 1px solid #ccc;
+		margin: 5px 0;
 	}
 </style>

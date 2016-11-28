@@ -27,7 +27,7 @@
 							<th>Discount Eligible?</th>
 						</tr>
 					</thead>
-					<tfoot>
+					<tfoot v-if="uniqueDiscountsWithFootnote().length">
 						<tr><td colspan="5">{{ offeringsFootnoteText }}</td></tr>
 					</tfoot>
 					<tbody>
@@ -147,5 +147,9 @@
 	.panel-footer {
 		background-color: inherit;
 		border-color: inherit;
+	}
+
+	.lead {
+		margin-bottom: 0;
 	}
 </style>

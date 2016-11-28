@@ -16,16 +16,16 @@
 				<h2>{{item.name}}</h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
-				<Attendees :item="item" :itemIndex="index" :user="user" :attendees="attendees" />
+				<Attendees :item="item" :itemIndex="index" :user="user" :attendees="item.attendees" :items="items" />
 
 				<div class="pull-right text-right" v-if="selectedOffering !== null">
-					{{ attendees.length }} &times; ${{ selectedOffering.cost }}
+					{{ item.attendees.length }} &times; ${{ selectedOffering.cost }}
 					<div>
 						&ndash;
 					</div>
-					<div class="subtotal">
-						<span>Subtotal:</span>
-						${{ subtotal }}
+					<div class="price">
+						<span>Price:</span>
+						${{ price }}
 					</div>
 				</div>
 			</div>
@@ -48,9 +48,7 @@
 		data() {
 			return {
 				collapsed: false,
-				selectedOfferingId: null,
-				attendees: [],
-				nextAttendeeId: 0
+				selectedOfferingId: null
 			};
 		},
 
@@ -60,21 +58,12 @@
 				return o || null;
 			},
 
-			subtotal() {
-				return (this.selectedOffering ? this.selectedOffering.cost : 0) * this.attendees.length * 1;
+			price() {
+				return (this.selectedOffering ? this.selectedOffering.cost : 0) * this.item.attendees.length * 1;
 			}
 		},
 
 		methods: {
-			addAttendee(attendee) {
-				if (attendee === undefined) {
-					attendee = { valid: false };
-				}
-				
-				attendee.uniqueId = this.nextAttendeeId++;
-				this.attendees.push(attendee);
-			},
-
 			removeItemClick(e, index) {
 				e.preventDefault();
 				this.$parent.removeItem(index);
@@ -87,7 +76,7 @@
 			},
 
 			addAttendeeClick(e, index) {
-				this.addAttendee();
+				bus.$emit(addAttendee, index);
 			},
 
 			selectedOfferingText() {
@@ -96,10 +85,6 @@
 					? o.date + ', ' + o.location
 					: '';
 			}
-		},
-
-		created: function() {
-			this.addAttendee();
 		}
 	};
 </script>
@@ -112,12 +97,12 @@
 	h4 {
 		margin: 0;
 	}
-	.subtotal {
+	.price {
 		font-size: 1.2em;
 		font-weight: bold;
 		border-top: 1px solid #ccc;
 	}
-	.subtotal > span {
+	.price > span {
 		margin-right: 15px;
 	}
 </style>
