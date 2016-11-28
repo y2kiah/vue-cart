@@ -19,13 +19,13 @@
 				<Attendees :item="item" :itemIndex="index" :user="user" :attendees="item.attendees" :items="items" />
 
 				<div class="pull-right text-right" v-if="selectedOffering !== null">
-					{{ item.attendees.length }} &times; ${{ selectedOffering.cost }}
-					<div>
-						&ndash;
+					Item price: {{ item.attendees.length }} &times; {{ formatMoney(selectedOffering.cost) }}
+					<div v-for="d in selectedDiscounts">
+						{{ d.name }}: &ndash; {{ formatMoney(discountAmount(d)) }}
 					</div>
 					<div class="price">
-						<span>Price:</span>
-						${{ price }}
+						<span>Item Subtotal:</span>
+						{{ formatMoney(itemSubtotal) }}
 					</div>
 				</div>
 			</div>
@@ -34,9 +34,12 @@
 </template>
 
 <script>
-	import CourseOfferings from './CourseOfferings'
-	import Attendees from './Attendees'
-	import Note from './Note'
+	import CourseOfferings from './CourseOfferings';
+	import Attendees from './Attendees';
+	import Note from './Note';
+	import DiscountService from '../DiscountService';
+
+	const discountService = new DiscountService();
 
 	export default {
 		name: 'CartItem',
@@ -47,26 +50,38 @@
 
 		data() {
 			return {
-				collapsed: false,
-				selectedOfferingId: null
+				collapsed: false
 			};
 		},
 
 		computed: {
 			selectedOffering() {
-				let o = this.item.offerings.find((o) => { return o.id === this.selectedOfferingId; });
+				let o = this.item.offerings.find((o) => { return o.id === this.item.selectedOfferingId; });
 				return o || null;
 			},
 
 			price() {
 				return (this.selectedOffering ? this.selectedOffering.cost : 0) * this.item.attendees.length * 1;
+			},
+
+			selectedDiscounts() {
+				let o = this.selectedOffering;
+				return o.discounts.map((d) => this.discounts[d]);
+			},
+
+			itemSubtotal() {
+				return discountService.calcItemSubtotal(this.price, this.selectedDiscounts);
 			}
 		},
 
 		methods: {
+			formatMoney(amount) {
+				return accounting.formatMoney(amount);
+			},
+
 			removeItemClick(e, index) {
 				e.preventDefault();
-				this.$parent.removeItem(index);
+				bus.$emit('removeItem', index);
 			},
 
 			moveToWishListClick(e, index) {
@@ -84,6 +99,10 @@
 				return (o !== null)
 					? o.date + ', ' + o.location
 					: '';
+			},
+
+			discountAmount(discount) {
+				return discountService.calcSingleDiscountAmount(this.price, discount);
 			}
 		}
 	};

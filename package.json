@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "accounting": "^0.4.1",
     "bootstrap": "^3.3.7",
     "eslint-plugin-promise": "^2.0.1",
     "font-awesome": "^4.7.0",

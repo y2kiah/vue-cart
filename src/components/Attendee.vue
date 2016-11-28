@@ -29,121 +29,115 @@
 				&ndash; Or &ndash;
 			</div>
 			<h4>Create New Attendee</h4>
-			<form @submit.prevent="validateForm(formScope)" :data-scope="formScope">
+			<form @submit.prevent="validateForm(formScope)" :data-vv-scope="formScope">
 				<div class="row">
-					<div :class="['form-group', 'col-md-5', {'has-error': errors.has('firstname',formScope)}]">
+					<div :class="['form-group', 'col-md-5', {'has-error': errors.has('attendee.firstname',formScope)}]">
 						<label class="control-label" :for="'firstname_'+itemIndex+'_'+index">First Name</label>
-						<input type="text" name="firstname" :id="'firstname_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.firstname" v-validate data-rules="required" data-as="first name">
-
-						<span v-show="errors.has('firstname',formScope)" class="help-block">{{ errors.first('firstname',formScope) }}</span>
+						<input type="text" name="attendee.firstname" :id="'firstname_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.firstname" v-validate="attendee.firstname" data-vv-rules="required" data-vv-as="first name">
+						
+						<span v-show="errors.has('attendee.firstname',formScope)" class="help-block">{{ errors.first('attendee.firstname',formScope) }}</span>
 					</div>
-					<div :class="['form-group', 'col-md-2', {'has-error': errors.has('middleinitial',formScope)}]">
+					<div :class="['form-group', 'col-md-2', {'has-error': errors.has('attendee.middleinitial',formScope)}]">
 						<label class="control-label" :for="'middleinitial_'+itemIndex+'_'+index">Middle Initial</label>
-						<input type="text" name="middleinitial" :id="'middleinitial_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.middleinitial" maxlength="1" data-as="middle initial">
-
-						<span v-show="errors.has('middleinitial',formScope)" class="help-block">{{ errors.first('middleinitial',formScope) }}</span>
+						<input type="text" name="attendee.middleinitial" :id="'middleinitial_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.middleinitial" maxlength="1">
 					</div>
-					<div :class="['form-group', 'col-md-5', {'has-error': errors.has('lastname',formScope)}]">
+					<div :class="['form-group', 'col-md-5', {'has-error': errors.has('attendee.lastname',formScope)}]">
 						<label class="control-label" :for="'lastname_'+itemIndex+'_'+index">Last Name</label>
-						<input type="text" name="lastname" :id="'lastname_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.lastname" v-validate data-rules="required" data-as="last name">
+						<input type="text" name="attendee.lastname" :id="'lastname_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.lastname" v-validate="attendee.lastname" data-vv-rules="required" data-vv-as="last name">
 
-						<span v-show="errors.has('lastname',formScope)" class="help-block">{{ errors.first('lastname',formScope) }}</span>
+						<span v-show="errors.has('attendee.lastname',formScope)" class="help-block">{{ errors.first('attendee.lastname',formScope) }}</span>
 					</div>
 				</div>
 				<div class="row">
-					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('email',formScope)}]">
+					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('attendee.email',formScope)}]">
 						<label class="control-label" :for="'email_'+itemIndex+'_'+index">Email</label>
-						<input type="text" name="email" :id="'email_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.email" v-validate data-rules="required|email">{{ email }}
+						<input type="text" name="attendee.email" :id="'email_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.email" v-validate="attendee.email" data-vv-rules="required|email" data-vv-as="email">{{ email }}
 
-						<span v-show="errors.has('email',formScope)" class="help-block">{{ errors.first('email',formScope) }}</span>
+						<span v-show="errors.has('attendee.email',formScope)" class="help-block">{{ errors.first('attendee.email',formScope) }}</span>
 					</div>
-					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('phone',formScope)}]">
+					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('attendee.phone',formScope)}]">
 						<label class="control-label" :for="'phone_'+itemIndex+'_'+index">Phone</label>
-						<input type="text" name="phone" :id="'phone_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.phone" v-validate data-rules="required" data-as="phone number">
+						<input type="text" name="attendee.phone" :id="'phone_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.phone" v-validate="attendee.phone" data-vv-rules="required" data-vv-as="phone number">
 
-						<span v-show="errors.has('phone',formScope)" class="help-block">{{ errors.first('phone',formScope) }}</span>
+						<span v-show="errors.has('attendee.phone',formScope)" class="help-block">{{ errors.first('attendee.phone',formScope) }}</span>
 					</div>
 				</div>
 				<div class="row">
-					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('dob',formScope)}]">
+					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('attendee.dob',formScope)}]">
 						<label class="control-label" :for="'dob_'+itemIndex+'_'+index">Date of Birth</label>
-						<input type="text" name="dob" :id="'dob_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.dob" v-validate data-rules="required|date_format:MM/DD/YYYY" placeholder="MM/DD/YYYY" data-as="date of birth">
+						<input type="text" name="attendee.dob" :id="'dob_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.dob" v-validate="attendee.dob" data-vv-rules="required|date_format:MM/DD/YYYY" placeholder="MM/DD/YYYY" data-vv-as="date of birth">
 
-						<span v-show="errors.has('dob',formScope)" class="help-block">{{ errors.first('dob',formScope) }}</span>
+						<span v-show="errors.has('attendee.dob',formScope)" class="help-block">{{ errors.first('attendee.dob',formScope) }}</span>
 					</div>
-					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('erauid',formScope)}]">
+					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('attendee.erauid',formScope)}]">
 						<label class="control-label" :for="'erauid_'+itemIndex+'_'+index">ERAU ID (optional)</label>
-						<input type="text" name="erauid" :id="'erauid_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.erauid" v-validate data-rules="digits:7" maxlength="7" data-as="ERAU ID">
+						<input type="text" name="attendee.erauid" :id="'erauid_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.erauid" v-validate="attendee.erauid" data-vv-rules="digits:7" maxlength="7" data-vv-as="ERAU ID">
 
-						<span v-show="errors.has('erauid',formScope)" class="help-block">{{ errors.first('erauid',formScope) }}</span>
+						<span v-show="errors.has('attendee.erauid',formScope)" class="help-block">{{ errors.first('attendee.erauid',formScope) }}</span>
 					</div>
 				</div>
 				<h4>Organization</h4>
 				<div class="row">
-					<div :class="['form-group', 'col-md-12', {'has-error': errors.has('companyname',formScope)}]">
+					<div :class="['form-group', 'col-md-12', {'has-error': errors.has('attendee.companyname',formScope)}]">
 						<label class="control-label" :for="'companyname_'+itemIndex+'_'+index">Company Name (optional)</label>
-						<input type="text" name="companyname" :id="'companyname_'+itemIndex+'_'+index" class="form-control"
+						<input type="text" name="attendee.companyname" :id="'companyname_'+itemIndex+'_'+index" class="form-control"
 							   v-model="attendee.companyname">
-
-						<span v-show="errors.has('companyname',formScope)" class="help-block">{{ errors.first('companyname',formScope) }}</span>
 					</div>
 				</div>
 				<div class="row">
-					<div :class="['form-group', 'col-md-12', {'has-error': errors.has('jobtitle',formScope)}]">
+					<div :class="['form-group', 'col-md-12', {'has-error': errors.has('attendee.jobtitle',formScope)}]">
 						<label class="control-label" :for="'jobtitle_'+itemIndex+'_'+index">Job Title (optional)</label>
-						<input type="text" name="jobtitle" :id="'jobtitle_'+itemIndex+'_'+index" class="form-control"
+						<input type="text" name="attendee.jobtitle" :id="'jobtitle_'+itemIndex+'_'+index" class="form-control"
 							   v-model="attendee.jobtitle">
-
-						<span v-show="errors.has('jobtitle',formScope)" class="help-block">{{ errors.first('jobtitle',formScope) }}</span>
 					</div>
 				</div>
 				<h4>Mailing Address</h4>
 				<div class="row">
-					<div :class="['form-group', 'col-md-12', {'has-error': errors.has('address',formScope)}]">
+					<div :class="['form-group', 'col-md-12', {'has-error': errors.has('attendee.address',formScope)}]">
 						<label class="control-label" :for="'address_'+itemIndex+'_'+index">Street Address</label>
-						<input type="text" name="address" :id="'address_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.address" v-validate data-rules="required" data-as="street address">
+						<input type="text" name="attendee.address" :id="'address_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.address" v-validate="attendee.address" data-vv-rules="required" data-vv-as="street address">
 
-						<span v-show="errors.has('address',formScope)" class="help-block">{{ errors.first('address',formScope) }}</span>
+						<span v-show="errors.has('attendee.address',formScope)" class="help-block">{{ errors.first('attendee.address',formScope) }}</span>
 					</div>
 				</div>
 				<div class="row">
-					<div :class="['form-group', 'col-md-6', {'has-error': errors.has('city',formScope)}]">
+					<div :class="['form-group', 'col-md-6', {'has-error': errors.has('attendee.city',formScope)}]">
 						<label class="control-label" :for="'city_'+itemIndex+'_'+index">City</label>
-						<input type="text" name="city" :id="'city_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.city" v-validate data-rules="required">
+						<input type="text" name="attendee.city" :id="'city_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.city" v-validate="attendee.city" data-vv-rules="required" data-vv-as="city">
 
-						<span v-show="errors.has('city',formScope)" class="help-block">{{ errors.first('city',formScope) }}</span>
+						<span v-show="errors.has('attendee.city',formScope)" class="help-block">{{ errors.first('attendee.city',formScope) }}</span>
 					</div>
-					<div :class="['form-group', 'col-md-2', {'has-error': errors.has('state',formScope)}]">
+					<div :class="['form-group', 'col-md-2', {'has-error': errors.has('attendee.state',formScope)}]">
 						<label class="control-label" :for="'state_'+itemIndex+'_'+index">State</label>
-						<input type="text" name="state" :id="'state_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.state">
+						<input type="text" name="attendee.state" :id="'state_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.state" v-validate="attendee.state" data-vv-rules="required" data-vv-as="state">
 
-						<span v-show="errors.has('state',formScope)" class="help-block">{{ errors.first('state',formScope) }}</span>
+						<span v-show="errors.has('attendee.state',formScope)" class="help-block">{{ errors.first('attendee.state',formScope) }}</span>
 					</div>
-					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('zip',formScope)}]">
+					<div :class="['form-group', 'col-md-4', {'has-error': errors.has('attendee.zip',formScope)}]">
 						<label class="control-label" :for="'zip_'+itemIndex+'_'+index">Zip</label>
-						<input type="text" name="zip" :id="'zip_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.zip" v-validate data-rules="required" data-as="zip code">
+						<input type="text" name="attendee.zip" :id="'zip_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.zip" v-validate="attendee.zip" data-vv-rules="required" data-vv-as="zip code">
 
-						<span v-show="errors.has('zip',formScope)" class="help-block">{{ errors.first('zip',formScope) }}</span>
+						<span v-show="errors.has('attendee.zip',formScope)" class="help-block">{{ errors.first('attendee.zip',formScope) }}</span>
 					</div>
 				</div>
 				<div class="row">
-					<div :class="['form-group', 'col-md-8', {'has-error': errors.has('country',formScope)}]">
+					<div :class="['form-group', 'col-md-8', {'has-error': errors.has('attendee.country',formScope)}]">
 						<label class="control-label" :for="'country_'+itemIndex+'_'+index">Country</label>
-						<input type="text" name="country" :id="'country_'+itemIndex+'_'+index" class="form-control"
-							   v-model="attendee.country" v-validate data-rules="required">
+						<input type="text" name="attendee.country" :id="'country_'+itemIndex+'_'+index" class="form-control"
+							   v-model="attendee.country" v-validate="attendee.country" data-vv-rules="required" data-vv-as="country">
 
-						<span v-show="errors.has('country',formScope)" class="help-block">{{ errors.first('country',formScope) }}</span>
+						<span v-show="errors.has('attendee.country',formScope)" class="help-block">{{ errors.first('attendee.country',formScope) }}</span>
 					</div>
 				</div>
 
@@ -187,7 +181,7 @@
 
 			validAttendeesNotAdded() {
 				// get single array of all attendees and dedupe
-				let all = this.items.map((i) => { return i.attendees; })
+				let all = this.items.map((i) => { return i.attendees; });
 				let allUnique = [].concat(...all);
 				allUnique = _.uniqBy(allUnique, (a) => a.email)
 							.filter((a) => a.valid);
@@ -209,28 +203,53 @@
 					}
 				});
 
-				// TODO:
-				// only way I could seem to find to get validation to recognize my state changes automatically
-				// find a better way, this is aweful, the time delay might not work for all users
-				setTimeout(() => {
-					this.validateForm(this.formScope);
-				}, 100);
+				this.validateForm(this.formScope);
+			},
+
+			// temporary fix for bug in vee-validate
+			validateAll(scope) {
+				let values = this.$validator._resolveValuesFromGetters();
+				let test = true;
+				let promises = [];
+				
+				this.errors.clear();
+
+				Object.keys(values).forEach(property => {
+					var result = this.$validator.validate(property, values[property], scope);
+					if (typeof result.then === 'function') {
+						promises.push(result);
+						return;
+					}
+
+					test = test && result;
+				});
+
+				return Promise.all(promises).then(function(vals) {
+					var valid = vals.every(function (t) {
+						return t;
+					}) && test;
+
+					return valid;
+				});
 			},
 
 			validateForm(scope) {
-				this.$validator.validateAll(scope);
-				
-				if (this.errors.any(scope)) {
-					let errorFields = _.keys(this.errors.collect());
-					let sel = errorFields.map(val => { return '[name="'+val+'"]'; }).join(",");
+				//this.$validator.validateAll(scope);
+				let v = this.validateAll(scope);
 
-					$(sel, this.$el).first().focus();
-					
-					return;
-				}
+				v.then(a => {
+					if (this.errors.any(scope)) {
+						let errorFields = _.keys(this.errors.collect());
+						let sel = errorFields.map(val => { return '[name="'+val+'"]'; }).join(",");
 
-				this.attendee.valid = true;
-				this.collapsed = true;
+						$(sel, this.$el).first().focus();
+						
+						return;
+					}
+
+					this.attendee.valid = true;
+					this.collapsed = true;
+				});
 			},
 
 			cancelClick(e) {
@@ -240,6 +259,7 @@
 					}
 				});
 				
+				this.errors.clear();
 				this.collapsed = true;
 			},
 
@@ -250,6 +270,7 @@
 			editClick(e) {
 				e.preventDefault();
 				this.attendeeTempCopy = _.clone(this.attendee);
+				this.attendee.valid = false;
 				this.collapsed = false;
 			},
 

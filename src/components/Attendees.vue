@@ -1,5 +1,5 @@
 <template>
-	<div :class="['panel', 'panel-default', { 'panel-success': collapsed && valid }]">
+	<div :class="['panel', 'panel-default', { 'panel-success': allValid }]">
 		<div class="panel-body">
 			<h4>Attendees ({{ attendees.length }})</h4>
 
@@ -20,7 +20,7 @@
 			</div>
 
 		</div>
-		<div class="panel-footer" v-show="valid">
+		<div class="panel-footer" v-show="allValid">
 			<a href="#" class="" @click="addAttendeeClick">
 				<i class="glyphicon glyphicon-user"></i>+ Register another attendee
 			</a>
@@ -46,12 +46,7 @@
 		},
 
 		computed: {
-			collapsed() {
-				//console.log(this.$children)
-				return true;//this.children.findIndex() .$data.collapsed
-			},
-
-			valid() {
+			allValid() {
 				return (this.attendees.length > 0
 						&& this.attendees.findIndex(a => !a.valid) === -1);
 			}

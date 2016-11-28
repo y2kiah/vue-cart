@@ -12,7 +12,12 @@
 		</div>
 		<div class="row">
 			<div class="col-md-8 col-lg-9 clearfix">
-				<CartItems :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItems>
+				<div id="cartItems">
+					<ul class="list-unstyled">
+						<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
+								  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
+					</ul>
+				</div>
 			</div>
 			<div class="col-md-4 col-lg-3">
 				<PurchaseSummary :items="items" :discounts="discounts"></PurchaseSummary>
@@ -24,14 +29,14 @@
 <script>
 	import Vue from 'vue';
 	import Navbar from './components/Navbar';
-	import CartItems from './components/CartItems';
+	import CartItem from './components/CartItem';
 	import PurchaseSummary from './components/PurchaseSummary';
 	import Note from './components/Note';
 
 	export default {
 		name: 'App',
 
-		components: { Navbar, CartItems, PurchaseSummary, Note },
+		components: { Navbar, CartItem, PurchaseSummary, Note },
 
 		data() {
 			return {
@@ -39,7 +44,8 @@
 				{
 					id: 0,
 					name: '10% early-bird',
-					footnote: 'Discount applied at checkout for registering more than 60 days early'
+					footnote: 'Discount applied at checkout for registering more than 60 days early',
+					percentItem: 10
 				}],
 
 				nextItemId: 2,
@@ -67,7 +73,8 @@
 						cost: '399',
 						discounts: [0]
 					}],
-					attendees: []
+					attendees: [],
+					selectedOfferingId: null
 				},
 				{
 					uniqueId: 1,
@@ -82,7 +89,8 @@
 						cost: '399',
 						discounts: []
 					}],
-					attendees: []
+					attendees: [],
+					selectedOfferingId: null
 				}],
 
 				wishList: [],
@@ -93,9 +101,9 @@
 					middleinitial: "J",
 					lastname: "Kiah",
 					email: "kiahj@erau.edu",
-					phone: "386-226-7047",
-					dob: "09/06/1981",
-					erauid: "0660215",
+					phone: "000-000-0000",
+					dob: "08/15/1980",
+					erauid: "1234567",
 					companyname: "ERAU",
 					jobtitle: "Manager of Applications Development and Integration",
 					address: "600 S. Clyde Morris Blvd.",
@@ -112,6 +120,7 @@
 				let copy = JSON.parse(JSON.stringify(this.items[index]));
 				copy.uniqueId = this.nextItemId++;
 				copy.attendees.splice(0);
+				copy.selectedOfferingId = null;
 				this.items.push(copy);
 				this.addAttendee(this.items.length - 1);
 			},
@@ -156,6 +165,10 @@
 				this.cloneItem(index);
 			});
 
+			bus.$on('removeItem', (index) => {
+				this.removeItem(index);
+			});
+
 			bus.$on('addAttendee', (itemIndex, attendee) => {
 				this.addAttendee(itemIndex, attendee);
 			});
@@ -164,8 +177,11 @@
 				this.removeAttendee(itemIndex, attendeeIndex);
 			});
 
+			// seed one empty attendee to each cart item
 			for (let i = 0; i < this.items.length; ++i) {
-				this.addAttendee(i);
+				if (this.items[i].attendees.length === 0) {
+					this.addAttendee(i);
+				}
 			}
 		}
 	}
