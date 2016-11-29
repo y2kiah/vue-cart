@@ -32,6 +32,9 @@
 	import CartItem from './components/CartItem';
 	import PurchaseSummary from './components/PurchaseSummary';
 	import Note from './components/Note';
+	import CalculationService from './CalculationService';
+
+	const calculationService = new CalculationService();
 
 	export default {
 		name: 'App',
@@ -156,8 +159,45 @@
 
 			removeAttendee(itemIndex, attendeeIndex) {
 				this.items[itemIndex].attendees.splice(attendeeIndex, 1);
-			}
+			},
 
+			selectedOffering(item) {
+				let o = item.offerings.find((o) => { return o.id === item.selectedOfferingId; });
+				return o || null;
+			},
+
+			selectedOfferingText(item) {
+				let o = this.selectedOffering(item);
+				return (o !== null)
+					? o.date + ', ' + o.location
+					: '';
+			},
+
+			selectedDiscounts(item) {
+				let o = this.selectedOffering(item);
+				return o.discounts.map((d) => this.discounts[d]);
+			},
+
+			itemSubtotal(item) {
+				return calculationService.calcItemSubtotal(this.itemPrice(item), this.selectedDiscounts(item));
+			},
+
+			itemPrice(item) {
+				let o = this.selectedOffering(item);
+				return (o ? o.cost : 0) * item.attendees.length;
+			},
+
+			purchaseSubtotal() {
+				let total = 0;
+				for (let item in this.items) {
+					total += this.itemSubtotal(item);
+				}
+				return total;
+			},
+
+			allItemsValid() {
+				return (this.items.findIndex((i) => i.selectedOfferingId === null) === -1);
+			}
 		},
 		
 		created() {

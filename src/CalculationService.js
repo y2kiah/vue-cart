@@ -1,19 +1,19 @@
-export default class DiscountService {
+export default class CalculationService {
 	
-	calcTotalDiscountAmount(itemCost, discounts) {
+	calcTotalItemDiscountAmount(itemCost, discounts) {
 		if (!(discounts instanceof Array)) {
 			discounts = [ discounts ];
 		}
 
 		let dis = 0;
 		for (let d of discounts) {
-			dis += this.calcSingleDiscountAmount(itemCost, d);
+			dis += this.calcSingleItemDiscountAmount(itemCost, d);
 		}
 
 		return dis;
 	}
 
-	calcSingleDiscountAmount(itemCost, discount) {
+	calcSingleItemDiscountAmount(itemCost, discount) {
 		// convert to cents
 		let cost = itemCost * 100;
 		
@@ -28,7 +28,7 @@ export default class DiscountService {
 			discounts = [ discount ];
 		}
 
-		let dis = this.calcTotalDiscountAmount(itemCost, discounts);
+		let dis = this.calcTotalItemDiscountAmount(itemCost, discounts);
 
 		return (itemCost - dis);
 	}

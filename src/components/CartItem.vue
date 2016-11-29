@@ -19,9 +19,9 @@
 				<Attendees :item="item" :itemIndex="index" :user="user" :attendees="item.attendees" :items="items" />
 
 				<div class="pull-right text-right" v-if="selectedOffering !== null">
-					Item price: {{ item.attendees.length }} &times; {{ formatMoney(selectedOffering.cost) }}
+					Course price: {{ item.attendees.length }} &times; {{ formatMoney(selectedOffering.cost) }}
 					<div v-for="d in selectedDiscounts">
-						{{ d.name }}: &ndash; {{ formatMoney(discountAmount(d)) }}
+						{{ d.name }} discount: &ndash; {{ formatMoney(discountAmount(d)) }}
 					</div>
 					<div class="price">
 						<span>Item Subtotal:</span>
@@ -37,9 +37,9 @@
 	import CourseOfferings from './CourseOfferings';
 	import Attendees from './Attendees';
 	import Note from './Note';
-	import DiscountService from '../DiscountService';
+	import CalculationService from '../CalculationService';
 
-	const discountService = new DiscountService();
+	const calculationService = new CalculationService();
 
 	export default {
 		name: 'CartItem',
@@ -56,21 +56,19 @@
 
 		computed: {
 			selectedOffering() {
-				let o = this.item.offerings.find((o) => { return o.id === this.item.selectedOfferingId; });
-				return o || null;
+				return this.$parent.selectedOffering(this.item);
 			},
 
 			price() {
-				return (this.selectedOffering ? this.selectedOffering.cost : 0) * this.item.attendees.length * 1;
+				return this.$parent.itemPrice(this.item);
 			},
 
 			selectedDiscounts() {
-				let o = this.selectedOffering;
-				return o.discounts.map((d) => this.discounts[d]);
+				return this.$parent.selectedDiscounts(this.item);
 			},
 
 			itemSubtotal() {
-				return discountService.calcItemSubtotal(this.price, this.selectedDiscounts);
+				return this.$parent.itemSubtotal(this.item);
 			}
 		},
 
@@ -95,14 +93,11 @@
 			},
 
 			selectedOfferingText() {
-				let o = this.selectedOffering;
-				return (o !== null)
-					? o.date + ', ' + o.location
-					: '';
+				return this.$parent.selectedOfferingText(this.item);
 			},
 
 			discountAmount(discount) {
-				return discountService.calcSingleDiscountAmount(this.price, discount);
+				return calculationService.calcSingleItemDiscountAmount(this.price, discount);
 			}
 		}
 	};

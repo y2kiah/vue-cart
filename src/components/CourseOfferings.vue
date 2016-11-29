@@ -2,7 +2,7 @@
 	<div :class="['panel', 'panel-default', { 'panel-success': collapsed && valid }]">
 		<div class="panel-body">
 			<div class="pull-right">
-				<a href="#" @click="editClick" v-if="collapsed">
+				<a href="#" @click.prevent="collapsed = false" v-if="collapsed">
 					Edit <i class="glyphicon glyphicon-chevron-right"></i>
 				</a>
 				<a href="#" @click.prevent="collapsed=true" v-if="!collapsed && valid">
@@ -31,7 +31,7 @@
 						<tr><td colspan="5">{{ offeringsFootnoteText }}</td></tr>
 					</tfoot>
 					<tbody>
-						<tr v-for="offering in item.offerings">
+						<tr v-for="offering in unselectedOfferings">
 							<td>
 								<div class="radio">
 									<label>
@@ -50,7 +50,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="panel-footer" v-show="valid">
+		<div class="panel-footer" v-if="valid && itemsForCourse.length < item.offerings.length">
 			<a href="#" class="" @click="cloneItemClick($event, index)">
 				<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add another Date/Location for this course
 			</a>
@@ -78,15 +78,35 @@
 				let ud = this.uniqueDiscountsWithFootnote();
 				ud = ud.map((d) => { return this.discountFootnoteIndicator(d.id) + ' ' + d.footnote; })
 				return ud.join('<br>');
+			},
+
+			itemsForCourse() {
+				return this.items.filter((i) => (i.id === this.item.id));
+			},
+
+			/**
+			 * Offerings that have not been selected in another item for the same course.
+			 */
+			unselectedOfferings() {
+				let otherOfferingIds = this.items
+					.filter((i) => (i.id === this.item.id && i.uniqueId !== this.item.uniqueId && i.selectedOfferingId !== null))
+					.map(i => i.selectedOfferingId);
+				
+				let unselected = this.item.offerings
+					.filter((o, idx) => otherOfferingIds.indexOf(idx) === -1 );
+				
+				return unselected;
+			}
+		},
+
+		created() {
+			if (this.unselectedOfferings.length === 1) {
+				this.item.selectedOfferingId = this.unselectedOfferings[0].id;
+				this.collapsed = true;
 			}
 		},
 
 		methods: {
-			editClick(e) {
-				e.preventDefault();
-				this.collapsed = false;
-			},
-
 			offeringClick(e) {
 				setTimeout(() => this.collapsed = true, 0);
 			},
@@ -98,7 +118,7 @@
 
 			uniqueDiscountsWithFootnote() {
 				// get single array from offering discount arrays and dedupe
-				let dis = this.item.offerings.map((o) => { return o.discounts; })
+				let dis = this.unselectedOfferings.map((o) => { return o.discounts; })
 				let ud = [].concat(...dis);
 				ud = Array.from(new Set(ud))
 					.map((d) => { return this.discounts[d]; })

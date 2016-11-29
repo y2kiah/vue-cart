@@ -191,7 +191,7 @@
 			},
 
 			formScope() {
-				return 'attendee-form-' + this.itemIndex;
+				return 'attendee-form-' + this.itemIndex + '-' + this.index;
 			}
 		},
 
