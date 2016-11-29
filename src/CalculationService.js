@@ -1,5 +1,5 @@
 export default class CalculationService {
-	
+
 	calcTotalItemDiscountAmount(itemCost, discounts) {
 		if (!(discounts instanceof Array)) {
 			discounts = [ discounts ];
@@ -36,8 +36,11 @@ export default class CalculationService {
 	_getDiscount(amount, discount) {
 		let dis = 0;
 
-		if (discount.hasOwnProperty('percentItem')) {
-			dis = amount * Math.abs(discount.percentItem / 100);
+		if (discount.hasOwnProperty('percent')) {
+			dis = amount * Math.abs(discount.percent / 100);
+		}
+		else if (discount.hasOwnProperty('amount')) {
+			dis = discount.amount;
 		}
 
 		return dis;

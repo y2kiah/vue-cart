@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-8 col-lg-9 clearfix">
+			<div class="col-md-8 clearfix">
 				<div id="cartItems">
 					<ul class="list-unstyled">
 						<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
@@ -19,7 +19,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="col-md-4 col-lg-3">
+			<div class="col-md-4">
 				<PurchaseSummary :items="items" :discounts="discounts"></PurchaseSummary>
 			</div>
 		</div>
@@ -48,7 +48,21 @@
 					id: 0,
 					name: '10% early-bird',
 					footnote: 'Discount applied at checkout for registering more than 60 days early',
-					percentItem: 10
+					percent: 10
+				},
+				{
+					id: 1,
+					name: 'ERAU alumni 10% discount',
+					couponCode: 'ERAUALUMN',
+					percent: 10,
+					limit: 1
+				},
+				{
+					id: 2,
+					name: 'Promotional $50 discount',
+					couponCode: 'ERAUPROMO',
+					amount: 50,
+					applied: 'total'
 				}],
 
 				nextItemId: 2,
@@ -95,6 +109,8 @@
 					attendees: [],
 					selectedOfferingId: null
 				}],
+
+				coupons: [],
 
 				wishList: [],
 
@@ -189,7 +205,7 @@
 
 			purchaseSubtotal() {
 				let total = 0;
-				for (let item in this.items) {
+				for (let item of this.items) {
 					total += this.itemSubtotal(item);
 				}
 				return total;

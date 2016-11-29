@@ -7,16 +7,31 @@
 					<div>{{ item.name }}</div>
 					<div><small>{{ $parent.selectedOfferingText(item) }}</small></div>
 					<div class="item-subtotal" v-if="selectedOffering(item) !== null">
-						Item Subtotal: {{ itemSubtotal(item) }}
+						<span class="pull-left"><strong>Item Subtotal:</strong></span>
+						<span class="pull-right">{{ itemSubtotal(item) }}</span>
 					</div>
 				</li>
 			</ul>
-			<div v-if="$parent.allItemsValid()">
-				<h4>Subtotal:</h4>
-				{{ purchaseSubtotal() }}
+			<div v-if="$parent.allItemsValid()" class="panel panel-default">
+				<div class="panel-body">
+					<div class="clearfix">
+						<h4 class="pull-left">Subtotal:</h4>
+						<span class="pull-right">{{ purchaseSubtotal }}</span>
+					</div>
+
+					<div class="form-group">
+						<label for="coupon">Coupon Code</label>
+						<input type="text" name="coupon" id="coupon" class="form-control" v-model="couponCode" placeholder="Enter code">
+					</div>
+
+					<div class="clearfix">
+						<h4 class="pull-left total">Purchase Total:</h4>
+						<span class="pull-right">{{ purchaseTotal }}</span>
+					</div>
+				</div>
 			</div>
 		</div>
-		<button type="button" class="btn btn-default col-md-12">SAVE AND CONTINUE SHOPPING</button>
+		<button type="button" class="btn btn-default col-md-12 save">SAVE AND CONTINUE SHOPPING</button>
 	</div>
 </template>
 
@@ -29,6 +44,18 @@
 		data () {
 			return {
 			};
+		},
+
+		computed: {
+			purchaseSubtotal() {
+				let subtotal = this.$parent.purchaseSubtotal();
+				return accounting.formatMoney(subtotal);
+			},
+
+			purchaseTotal() {
+				let total = this.$parent.purchaseSubtotal();
+				return accounting.formatMoney(total);
+			}
 		},
 
 		methods: {
@@ -44,19 +71,14 @@
 			itemSubtotal(item) {
 				let subtotal = this.$parent.itemSubtotal(item);
 				return accounting.formatMoney(subtotal);
-			},
-
-			purchaseSubtotal() {
-				let subtotal = this.$parent.purchaseSubtotal();
-				return accounting.formatMoney(subtotal);
 			}
 		}
 	};
 </script>
 
-<style lang="css" scoped>
-	h3 {
-		margin: 0;
+<style lang="scss" scoped>
+	h3, h4 {
+		margin: 0 0 10px 0;
 	}
 	
 	@media(max-width:767px) {
@@ -84,17 +106,25 @@
 		#purchaseSummary.affix {
 			position: fixed;
 			top: 30px;
-			width: 262.5px;
+			width: 360px;
 		}
 	}
 
 	button {
 		text-align: center;
 		white-space: normal;
+
+		&.save {
+			margin-bottom: 15px;
+		}
 	}
 
 	.item-subtotal {
 		text-align: right;
 		vertical-align: bottom;
+	}
+
+	.total {
+		font-weight: bold;
 	}
 </style>
