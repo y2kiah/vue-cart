@@ -8,6 +8,7 @@ window.accounting = require('accounting');
 import Vue from 'vue';
 import App from './App';
 import VeeValidate from 'vee-validate';
+import store from './store';
 
 Vue.use(VeeValidate, { strict: false });
 
@@ -20,8 +21,5 @@ window.vm = new Vue({
 
 	components: { App },
 	
-	data() {
-		return {
-		};
-	}
+	store
 })

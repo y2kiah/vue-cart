@@ -4,11 +4,11 @@
 			<h4 class="panel-title" v-if="collapsed">Attendee</h4>
 			<h4 class="panel-title" v-else-if="enteringNew">Add a New Attendee</h4>
 			<h4 class="panel-title" v-else-if="editing">Edit Attendee</h4>
-			<h4 class="panel-title" v-else>Select an Attendee</h4>
+			<h4 class="panel-title" v-else="!enteringNew && !editing">Select an Attendee</h4>
 		</div>
 		<div class="panel-body">
 			<div>
-				<div v-if="!collapsed">
+				<div v-if="!collapsed && !enteringNew && !editing">
 					<strong>Who will be attending &ldquo;{{ item.name }}&rdquo;{{ $parent.selectedOfferingId !== null ? ' - ' + $parent.selectedOfferingText() : '' }}?</strong>
 				</div>
 				<div class="row">
