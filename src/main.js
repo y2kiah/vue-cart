@@ -14,8 +14,6 @@ Vue.use(VeeValidate, { strict: false });
 
 /* eslint-disable no-new */
 
-window.bus = new Vue();
-
 window.vm = new Vue({
 	el: '#app',
 

@@ -34,6 +34,8 @@
 	import Note from './components/Note';
 	import CalculationService from './CalculationService';
 
+	import { mapState } from 'vuex';
+
 	const calculationService = new CalculationService();
 
 	export default {
@@ -41,180 +43,16 @@
 
 		components: { Navbar, CartItem, PurchaseSummary, Note },
 
+		computed: {
+			...mapState([ 'discounts', 'courses', 'items', 'wishList', 'coupons', 'user' ])
+		},
+
 		data() {
 			return {
-				discounts: [
-				{
-					id: 0,
-					name: '10% early-bird',
-					footnote: 'Discount applied at checkout for registering more than 60 days early',
-					percent: 10
-				},
-				{
-					id: 1,
-					name: 'ERAU alumni 10% discount',
-					couponCode: 'ERAUALUMN',
-					percent: 10,
-					limit: 1
-				},
-				{
-					id: 2,
-					name: 'Promotional $50 discount',
-					couponCode: 'ERAUPROMO',
-					amount: 50,
-					applied: 'total'
-				}],
-
-				nextItemId: 2,
-				nextAttendeeId: 0,
-
-				courses: [{
-					id: 0,
-					name: 'History & Application of sUAS',
-					offerings: [
-					{
-						id: 0,
-						date: 'Jan. 9 - Feb. 6, 2017',
-						length: '4 weeks',
-						location: 'Online',
-						cost: '399',
-						discounts: []
-					},
-					{
-						id: 1,
-						date: 'Mar. 11 - Apr. 16, 2017',
-						length: '4 weeks',
-						location: 'Online',
-						cost: '399',
-						discounts: [0]
-					}],
-					attendee: {},
-					selectedOfferingId: null
-				},
-				{
-					id: 1,
-					name: 'sUAS Design & Configuration',
-					offerings: [
-					{
-						id: 2,
-						date: 'Anytime',
-						length: '4 weeks',
-						location: 'Online',
-						cost: '399',
-						discounts: []
-					}],
-					attendee: {},
-					selectedOfferingId: null
-				}],
-
-				items: [
-				{
-					uniqueId: 0,
-					id: 0,
-					name: 'History & Application of sUAS',
-					offerings: [
-					{
-						id: 0,
-						date: 'Jan. 9 - Feb. 6, 2017',
-						length: '4 weeks',
-						location: 'Online',
-						cost: '399',
-						discounts: []
-					},
-					{
-						id: 1,
-						date: 'Mar. 11 - Apr. 16, 2017',
-						length: '4 weeks',
-						location: 'Online',
-						cost: '399',
-						discounts: [0]
-					}],
-					attendee: {},
-					selectedOfferingId: null
-				},
-				{
-					uniqueId: 1,
-					id: 1,
-					name: 'sUAS Design & Configuration',
-					offerings: [
-					{
-						id: 2,
-						date: 'Anytime',
-						length: '4 weeks',
-						location: 'Online',
-						cost: '399',
-						discounts: []
-					}],
-					attendee: {},
-					selectedOfferingId: null
-				}],
-
-				coupons: [],
-
-				wishList: [],
-
-				user: {
-					authenticated: true,
-					firstname: "Jeff",
-					middleinitial: "J",
-					lastname: "Kiah",
-					email: "kiahj@erau.edu",
-					phone: "000-000-0000",
-					dob: "08/15/1980",
-					erauid: "1234567",
-					companyname: "ERAU",
-					jobtitle: "Manager of Applications Development and Integration",
-					address: "600 S. Clyde Morris Blvd.",
-					city: "Daytona Beach",
-					state: "FL",
-					zip: "32114",
-					country: "United States of America"
-				}
 			};
 		},
 
 		methods: {
-			copyItem(index) {
-				let copy = JSON.parse(JSON.stringify(this.items[index]));
-				copy.uniqueId = this.nextItemId++;
-				copy.attendee = this.makeAttendee();
-				copy.selectedOfferingId = null;
-				this.items.unshift(copy);
-			},
-
-			removeItem(index) {
-				this.items.splice(index, 1);
-			},
-
-			makeAttendee() {
-				return {
-					valid: false,
-					firstname: "",
-					middleinitial: "",
-					lastname: "",
-					email: "",
-					phone: "",
-					dob: "",
-					erauid: "",
-					companyname: "",
-					jobtitle: "",
-					address: "",
-					city: "",
-					state: "",
-					zip: "",
-					country: "",
-					uniqueId: this.nextAttendeeId++
-				};
-			},
-
-			setAttendee(itemIndex, attendee) {
-				if (attendee === undefined) {
-					attendee = this.makeAttendee();
-				}
-				
-				this.items[itemIndex].attendee = attendee;
-			},
-
 			selectedOffering(item) {
 				let o = item.offerings.find((o) => { return o.id === item.selectedOfferingId; });
 				return o || null;
@@ -255,18 +93,6 @@
 		},
 		
 		created() {
-			bus.$on('copyItem', (index) => {
-				this.copyItem(index);
-			});
-
-			bus.$on('removeItem', (index) => {
-				this.removeItem(index);
-			});
-
-			bus.$on('setAttendee', (index, attendee) => {
-				this.setAttendee(index, attendee);
-			});
-
 			// seed one empty attendee to each cart item
 			/*for (let i = 0; i < this.items.length; ++i) {
 				if (this.items[i].attendees.length === 0) {

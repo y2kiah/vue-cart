@@ -16,7 +16,7 @@
 				<h2>{{item.name}}</h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
-				<!--<Attendees :item="item" :itemIndex="index" :user="user" :attendees="item.attendees" :items="items" />-->
+
 				<Attendee :item="item" :attendee="item.attendee" :itemIndex="index" :user="user" :items="items" :allAttendees="allAttendees"></Attendee>
 
 				<div class="clearfix">
@@ -85,12 +85,9 @@
 			 * @return {Array}
 			 */
 			allAttendees() {
-				let attendees = [];
-				for (let i of this.items) {
-					if (attendees.findIndex((a) => { a === i.attendee }) === -1) {
-						attendees.push(i.attendee);
-					}
-				}
+				let attendees = this.items.map((a) => a.attendee);
+				attendees = _.uniqBy(attendees, (a) => a.uniqueId);
+
 				return attendees;
 			}
 		},
@@ -102,18 +99,17 @@
 
 			copyItemClick(e, index) {
 				e.preventDefault();
-				bus.$emit('copyItem', index);
+				this.$store.dispatch('copyCartItem', index);
 			},
 
 			removeItemClick(e, index) {
 				e.preventDefault();
-				bus.$emit('removeItem', index);
+				this.$store.dispatch('removeFromCart', index);
 			},
 
 			moveToWishListClick(e, index) {
 				e.preventDefault();
-				let i = this.items.splice(index, 1);
-				this.wishList.push(i[0]);
+				this.$store.dispatch('moveToWishList', index);
 			},
 
 			selectedOfferingText() {

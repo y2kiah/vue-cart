@@ -21,7 +21,7 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li v-for="(course, index) in courses" :key="course.id">
-								<a href="#" @click.prevent="addCourse(course)">{{ course.name }}</a>
+								<a href="#" @click.prevent="addToCartClick(course)">{{ course.name }}</a>
 							</li>
 						</ul>
 					</li>
@@ -68,18 +68,12 @@
 
 		data () {
 			return {
-				nextUniqueId: 0
 			};
 		},
 
 		methods: {
-			addCourse(course) {
-				var newItem = _.clone(course);
-				newItem.uniqueId = this.nextUniqueId;
-				++this.nextUniqueId;
-				this.items.push(newItem);
-
-				bus.$emit('addAttendee', this.items.length - 1);
+			addToCartClick(course) {
+				this.$store.dispatch('addToCart', course);
 			}
 		}
 	};

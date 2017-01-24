@@ -5,7 +5,7 @@
 		</div>
 		<div class="panel-body">
 			<div class="pull-right">
-				<a href="#" @click.prevent="item.selectedOfferingId = null" v-if="valid && item.offerings.length > 1">
+				<a href="#" @click.prevent="editOfferingClick" v-if="valid && item.offerings.length > 1">
 					Edit <i class="glyphicon glyphicon-chevron-right"></i>
 				</a>
 			</div>
@@ -34,8 +34,8 @@
 								<div class="radio">
 									<label>
 										<input type="radio" :name="'items['+index+'][offering]'" :id="'offering_' + offering.id" :value="offering.id"
-												v-model="item.selectedOfferingId">
-										{{offering.date}}
+												v-model="selectedOfferingId">
+										{{ offering.date }}
 									</label>
 								</div>
 							</td>
@@ -62,13 +62,18 @@
 		},
 
 		computed: {
+			selectedOfferingId: {
+				get()    { return this.item.selectedOfferingId; },
+				set(val) { this.setOffering(val); }
+			},
+
 			valid() {
 				return (this.item.selectedOfferingId !== null);
 			},
 
 			offeringsFootnoteText() {
 				let ud = this.uniqueDiscountsWithFootnote();
-				ud = ud.map((d) => { return this.discountFootnoteIndicator(d.id) + ' ' + d.footnote; })
+				ud = ud.map((d) => this.discountFootnoteIndicator(d.id) + ' ' + d.footnote)
 				return ud.join('<br>');
 			},
 
@@ -91,16 +96,24 @@
 			}*/
 		},
 
-		created() {
-			if (this.item.offerings.length === 1) {
-				this.item.selectedOfferingId = this.item.offerings[0].id;
-			}
-		},
-
 		methods: {
+			setOffering(val) {
+				this.$store.dispatch('setOffering', {
+					itemIndex: this.index,
+					offeringId: +val
+				});
+			},
+
+			editOfferingClick(e) {
+				this.$store.dispatch('setOffering', {
+					itemIndex: this.index,
+					offeringId: null
+				});
+			},
+
 			uniqueDiscountsWithFootnote() {
 				// get single array from offering discount arrays and dedupe
-				let dis = this.item.offerings.map((o) => { return o.discounts; })
+				let dis = this.item.offerings.map((o) => o.discounts)
 				let ud = [].concat(...dis);
 				ud = Array.from(new Set(ud))
 					.map((d) => { return this.discounts[d]; })
@@ -112,7 +125,7 @@
 				let ud = this.uniqueDiscountsWithFootnote();
 
 				// find the matching discount
-				let pos = ud.findIndex((d) => { return d.id === discountId; });
+				let pos = ud.findIndex((d) => (d.id === discountId));
 
 				// fill a string of '*' based on position
 				return '*'.repeat(pos+1);
