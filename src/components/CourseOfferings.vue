@@ -1,22 +1,20 @@
 <template>
-	<div :class="['panel', 'panel-default', { 'panel-success': collapsed && valid }]">
+	<div :class="['panel', 'panel-default', { 'panel-success': valid }]">
+		<div class="panel-heading">
+			<h4 class="panel-title">Course Offering</h4>
+		</div>
 		<div class="panel-body">
 			<div class="pull-right">
-				<a href="#" @click.prevent="collapsed = false" v-if="collapsed">
+				<a href="#" @click.prevent="item.selectedOfferingId = null" v-if="valid && item.offerings.length > 1">
 					Edit <i class="glyphicon glyphicon-chevron-right"></i>
-				</a>
-				<a href="#" @click.prevent="collapsed=true" v-if="!collapsed && valid">
-					Done
 				</a>
 			</div>
 
-			<h4>Course Offering</h4>
-
-			<div v-show="collapsed && valid" class="lead">
+			<div v-show="valid" class="lead">
 				{{ $parent.selectedOfferingText() }}
 			</div>
 
-			<div v-show="!(collapsed && valid)" class="table-responsive">
+			<div v-show="!valid" class="table-responsive">
 				<table class="table table-default">
 					<thead>
 						<tr>
@@ -31,12 +29,12 @@
 						<tr><td colspan="5">{{ offeringsFootnoteText }}</td></tr>
 					</tfoot>
 					<tbody>
-						<tr v-for="offering in unselectedOfferings">
+						<tr v-for="offering in item.offerings">
 							<td>
 								<div class="radio">
 									<label>
 										<input type="radio" :name="'items['+index+'][offering]'" :id="'offering_' + offering.id" :value="offering.id"
-												@click="offeringClick" v-model="item.selectedOfferingId">
+												v-model="item.selectedOfferingId">
 										{{offering.date}}
 									</label>
 								</div>
@@ -50,11 +48,6 @@
 				</table>
 			</div>
 		</div>
-		<div class="panel-footer" v-if="valid && itemsForCourse.length < item.offerings.length">
-			<a href="#" class="" @click="cloneItemClick($event, index)">
-				<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add another Date/Location for this course
-			</a>
-		</div>
 	</div>
 </template>
 
@@ -65,7 +58,6 @@
 
 		data () {
 			return {
-				collapsed: false
 			};
 		},
 
@@ -87,7 +79,7 @@
 			/**
 			 * Offerings that have not been selected in another item for the same course.
 			 */
-			unselectedOfferings() {
+			/*unselectedOfferings() {
 				let otherOfferingIds = this.items
 					.filter((i) => (i.id === this.item.id && i.uniqueId !== this.item.uniqueId && i.selectedOfferingId !== null))
 					.map(i => i.selectedOfferingId);
@@ -96,29 +88,19 @@
 					.filter((o, idx) => otherOfferingIds.indexOf(idx) === -1 );
 				
 				return unselected;
-			}
+			}*/
 		},
 
 		created() {
-			if (this.unselectedOfferings.length === 1) {
-				this.item.selectedOfferingId = this.unselectedOfferings[0].id;
-				this.collapsed = true;
+			if (this.item.offerings.length === 1) {
+				this.item.selectedOfferingId = this.item.offerings[0].id;
 			}
 		},
 
 		methods: {
-			offeringClick(e) {
-				setTimeout(() => this.collapsed = true, 0);
-			},
-
-			cloneItemClick(e, index) {
-				e.preventDefault();
-				bus.$emit('cloneItem', index);
-			},
-
 			uniqueDiscountsWithFootnote() {
 				// get single array from offering discount arrays and dedupe
-				let dis = this.unselectedOfferings.map((o) => { return o.discounts; })
+				let dis = this.item.offerings.map((o) => { return o.discounts; })
 				let ud = [].concat(...dis);
 				ud = Array.from(new Set(ud))
 					.map((d) => { return this.discounts[d]; })
@@ -156,11 +138,15 @@
 		vertical-align: middle;
 	}
 	
-	h4 {
-		margin: 0 0 10px 0;
+	.panel-title {
+		font-size: 18px;
 	}
-	
-	.panel-success {
+
+	.panel-default > .panel-heading {
+		background-color: #fafafa;
+	}
+
+	.panel-success, .panel-success > .panel-heading {
 		background-color: #f0f8ed;
 	}
 
@@ -171,5 +157,9 @@
 
 	.lead {
 		margin-bottom: 0;
+	}
+
+	input[type="radio"] {
+		cursor: pointer;
 	}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Navbar :items="items" :wishList="wishList" :user="user"></Navbar>
+		<Navbar :items="items" :wishList="wishList" :courses="courses" :user="user"></Navbar>
 		<div class="row">
 			<div class="col-md-12">
 				<h1>Shopping Cart</h1>
@@ -68,6 +68,45 @@
 				nextItemId: 2,
 				nextAttendeeId: 0,
 
+				courses: [{
+					id: 0,
+					name: 'History & Application of sUAS',
+					offerings: [
+					{
+						id: 0,
+						date: 'Jan. 9 - Feb. 6, 2017',
+						length: '4 weeks',
+						location: 'Online',
+						cost: '399',
+						discounts: []
+					},
+					{
+						id: 1,
+						date: 'Mar. 11 - Apr. 16, 2017',
+						length: '4 weeks',
+						location: 'Online',
+						cost: '399',
+						discounts: [0]
+					}],
+					attendee: {},
+					selectedOfferingId: null
+				},
+				{
+					id: 1,
+					name: 'sUAS Design & Configuration',
+					offerings: [
+					{
+						id: 2,
+						date: 'Anytime',
+						length: '4 weeks',
+						location: 'Online',
+						cost: '399',
+						discounts: []
+					}],
+					attendee: {},
+					selectedOfferingId: null
+				}],
+
 				items: [
 				{
 					uniqueId: 0,
@@ -80,7 +119,7 @@
 						length: '4 weeks',
 						location: 'Online',
 						cost: '399',
-						discounts: [0]
+						discounts: []
 					},
 					{
 						id: 1,
@@ -90,7 +129,7 @@
 						cost: '399',
 						discounts: [0]
 					}],
-					attendees: [],
+					attendee: {},
 					selectedOfferingId: null
 				},
 				{
@@ -106,7 +145,7 @@
 						cost: '399',
 						discounts: []
 					}],
-					attendees: [],
+					attendee: {},
 					selectedOfferingId: null
 				}],
 
@@ -135,46 +174,45 @@
 		},
 
 		methods: {
-			cloneItem(index) {
+			copyItem(index) {
 				let copy = JSON.parse(JSON.stringify(this.items[index]));
 				copy.uniqueId = this.nextItemId++;
-				copy.attendees.splice(0);
+				copy.attendee = this.makeAttendee();
 				copy.selectedOfferingId = null;
-				this.items.push(copy);
-				this.addAttendee(this.items.length - 1);
+				this.items.unshift(copy);
 			},
 
 			removeItem(index) {
 				this.items.splice(index, 1);
 			},
 
-			addAttendee(itemIndex, attendee) {
-				if (attendee === undefined) {
-					attendee = {
-						valid: false,
-						firstname: "",
-						middleinitial: "",
-						lastname: "",
-						email: "",
-						phone: "",
-						dob: "",
-						erauid: "",
-						companyname: "",
-						jobtitle: "",
-						address: "",
-						city: "",
-						state: "",
-						zip: "",
-						country: ""
-					};
-				}
-				
-				attendee.uniqueId = this.nextAttendeeId++;
-				this.items[itemIndex].attendees.push(attendee);
+			makeAttendee() {
+				return {
+					valid: false,
+					firstname: "",
+					middleinitial: "",
+					lastname: "",
+					email: "",
+					phone: "",
+					dob: "",
+					erauid: "",
+					companyname: "",
+					jobtitle: "",
+					address: "",
+					city: "",
+					state: "",
+					zip: "",
+					country: "",
+					uniqueId: this.nextAttendeeId++
+				};
 			},
 
-			removeAttendee(itemIndex, attendeeIndex) {
-				this.items[itemIndex].attendees.splice(attendeeIndex, 1);
+			setAttendee(itemIndex, attendee) {
+				if (attendee === undefined) {
+					attendee = this.makeAttendee();
+				}
+				
+				this.items[itemIndex].attendee = attendee;
 			},
 
 			selectedOffering(item) {
@@ -200,7 +238,7 @@
 
 			itemPrice(item) {
 				let o = this.selectedOffering(item);
-				return (o ? o.cost : 0) * item.attendees.length;
+				return (o ? o.cost : 0);
 			},
 
 			purchaseSubtotal() {
@@ -217,28 +255,24 @@
 		},
 		
 		created() {
-			bus.$on('cloneItem', (index) => {
-				this.cloneItem(index);
+			bus.$on('copyItem', (index) => {
+				this.copyItem(index);
 			});
 
 			bus.$on('removeItem', (index) => {
 				this.removeItem(index);
 			});
 
-			bus.$on('addAttendee', (itemIndex, attendee) => {
-				this.addAttendee(itemIndex, attendee);
-			});
-
-			bus.$on('removeAttendee', (itemIndex, attendeeIndex) => {
-				this.removeAttendee(itemIndex, attendeeIndex);
+			bus.$on('setAttendee', (index, attendee) => {
+				this.setAttendee(index, attendee);
 			});
 
 			// seed one empty attendee to each cart item
-			for (let i = 0; i < this.items.length; ++i) {
+			/*for (let i = 0; i < this.items.length; ++i) {
 				if (this.items[i].attendees.length === 0) {
 					this.addAttendee(i);
 				}
-			}
+			}*/
 		}
 	}
 </script>

@@ -15,7 +15,7 @@ Vue.use(VeeValidate, { strict: false });
 
 window.bus = new Vue();
 
-new Vue({
+window.vm = new Vue({
 	el: '#app',
 
 	components: { App },

@@ -14,10 +14,18 @@
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<!--<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Link</a></li>
-					<li><a href="#">Link</a></li>
-				</ul>-->
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							Add Courses <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li v-for="(course, index) in courses" :key="course.id">
+								<a href="#" @click.prevent="addCourse(course)">{{ course.name }}</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -56,11 +64,23 @@
 	export default {
 		name: 'Navbar',
 
-		props: [ 'items', 'wishList', 'user' ],
+		props: [ 'items', 'wishList', 'courses', 'user' ],
 
 		data () {
 			return {
+				nextUniqueId: 0
 			};
+		},
+
+		methods: {
+			addCourse(course) {
+				var newItem = _.clone(course);
+				newItem.uniqueId = this.nextUniqueId;
+				++this.nextUniqueId;
+				this.items.push(newItem);
+
+				bus.$emit('addAttendee', this.items.length - 1);
+			}
 		}
 	};
 </script>
