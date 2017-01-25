@@ -1,11 +1,9 @@
 import * as types from './mutation-types';
 
 let nextItemId = 0;
-let nextAttendeeId = 0;
 
 function makeAttendee() {
 	return {
-		valid: false,
 		firstname: "",
 		middleinitial: "",
 		lastname: "",
@@ -19,16 +17,19 @@ function makeAttendee() {
 		city: "",
 		state: "",
 		zip: "",
-		country: "",
-		uniqueId: nextAttendeeId++
+		country: ""
 	};
 }
 
 export default {
 	[types.ADD_TO_CART](state, course) {
-		let newItem = _.clone(course);
-		newItem.uniqueId = nextItemId++;
-		
+		let newItem = {
+			...course,
+			uniqueId: nextItemId++,
+			attendee: makeAttendee(),
+			selectedOfferingId: null
+		};
+
 		// pre-select offering when only one is available
 		if (newItem.offerings.length === 1) {
 			newItem.selectedOfferingId = newItem.offerings[0].id;
@@ -68,7 +69,17 @@ export default {
 		state.items[itemIndex].attendee = attendee;
 	},
 
+	[types.UPDATE_ATTENDEE](state, { itemIndex, data }) {
+		let attendee = state.items[itemIndex].attendee;
+
+		_.forOwn(data, (value, key) => {
+			if (_.has(attendee, key)) {
+				attendee[key] = value;
+			}
+		});
+	},
+
 	[types.SET_OFFERING](state, { itemIndex, offeringId }) {
 		state.items[itemIndex].selectedOfferingId = offeringId;
-	},
+	}
 }

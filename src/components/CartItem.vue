@@ -86,7 +86,8 @@
 			 */
 			allAttendees() {
 				let attendees = this.items.map((a) => a.attendee);
-				attendees = _.uniqBy(attendees, (a) => a.uniqueId);
+				attendees = attendees.filter((a) => a.email);
+				attendees = _.uniqBy(attendees, (a) => a.email);
 
 				return attendees;
 			}

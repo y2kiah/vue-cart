@@ -26,6 +26,10 @@ export default {
 		context.commit(types.SET_ATTENDEE, { itemIndex, attendee });
 	},
 
+	updateAttendee(context, { itemIndex, data }) {
+		context.commit(types.UPDATE_ATTENDEE, { itemIndex, data });
+	},
+
 	setOffering(context, { itemIndex, offeringId }) {
 		console.log(itemIndex)
 		console.log(offeringId)

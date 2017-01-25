@@ -51,9 +51,7 @@ const store = new Vuex.Store({
 				location: 'Online',
 				cost: '399',
 				discounts: [0]
-			}],
-			attendee: {},
-			selectedOfferingId: null
+			}]
 		},
 		{
 			id: 1,
@@ -66,9 +64,7 @@ const store = new Vuex.Store({
 				location: 'Online',
 				cost: '399',
 				discounts: []
-			}],
-			attendee: {},
-			selectedOfferingId: null
+			}]
 		}],
 
 		items: [],
