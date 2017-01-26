@@ -4,6 +4,6 @@ export const scrollUpTo = function($el) {
 	if ($(document).scrollTop() > top) {
 		$('html, body').animate({
 			scrollTop: top
-		}, 300);
+		}, 200);
 	}
 }
