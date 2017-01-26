@@ -47,6 +47,7 @@
 	import Attendee from './Attendee';
 	import Note from './Note';
 	import CalculationService from '../CalculationService';
+	import { scrollUpTo } from '../helpers';
 
 	const calculationService = new CalculationService();
 
@@ -100,6 +101,7 @@
 
 			copyItemClick(e, index) {
 				e.preventDefault();
+				scrollUpTo($('#cartItems li:first'));
 				this.$store.dispatch('copyCartItem', index);
 			},
 

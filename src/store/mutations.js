@@ -47,6 +47,11 @@ export default {
 		copy.uniqueId = nextItemId++;
 		copy.attendee = makeAttendee();
 		copy.selectedOfferingId = null;
+
+		// pre-select offering when only one is available
+		if (copy.offerings.length === 1) {
+			copy.selectedOfferingId = copy.offerings[0].id;
+		}
 		
 		state.items.unshift(copy);
 	},

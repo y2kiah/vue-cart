@@ -180,6 +180,7 @@
 <script>
 	import Vue from 'vue';
 	import { Validator } from 'vee-validate';
+	import { scrollUpTo } from '../helpers';
 
 	Validator.extend('phone', {
 		getMessage: field => 'Please enter a valid phone number',
@@ -283,13 +284,7 @@
 					else {
 						// scroll up to top of containing li
 						if (this.editing || this.enteringNew) {
-							var top = $(this.$el).closest('li').offset().top;
-
-							if ($(document).scrollTop() > top) {
-								$('html, body').animate({
-									scrollTop: top
-    							}, 300);
-    						}
+							scrollUpTo($(this.$el).closest('li'));
 						}
 
 						this.$store.dispatch('updateAttendee', {
@@ -320,6 +315,11 @@
 			},
 
 			cancelClick() {
+				// scroll up to top of containing li
+				if (this.editing || this.enteringNew) {
+					scrollUpTo($(this.$el).closest('li'));
+				}
+
 				this.copyAttendeeToForm(this.attendee);
 
 				this.errors.clear();
@@ -329,6 +329,11 @@
 			},
 
 			resetAttendeeClick() {
+				// scroll up to top of containing li
+				if (this.editing || this.enteringNew) {
+					scrollUpTo($(this.$el).closest('li'));
+				}
+
 				this.$store.dispatch('setAttendee', {
 					itemIndex: this.itemIndex
 				})
