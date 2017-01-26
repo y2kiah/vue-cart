@@ -1,5 +1,5 @@
 <template>
-	
+	<li class="cart-item">
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="pull-right">
@@ -15,7 +15,7 @@
 
 				<h2>{{item.name}}</h2>
 
-				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts" />
+				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts"></CourseOfferings>
 
 				<Attendee :item="item" :attendee="item.attendee" :itemIndex="index" :user="user" :items="items" :allAttendees="allAttendees"></Attendee>
 
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 		</div>
-	
+	</li>
 </template>
 
 <script>

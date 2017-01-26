@@ -331,6 +331,7 @@
 			resetAttendeeClick() {
 				// scroll up to top of containing li
 				if (this.editing || this.enteringNew) {
+					console.log($(this.$el).closest('li'))
 					scrollUpTo($(this.$el).closest('li'));
 				}
 

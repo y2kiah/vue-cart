@@ -13,12 +13,10 @@
 		<div class="row">
 			<div class="col-md-8 clearfix">
 				<div id="cartItems">
-					<ul class="list-unstyled">
-						<transition-group name="itemsTransition" tag="li">
-							<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
-									  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
-						</transition-group>
-					</ul>
+					<transition-group name="slide-fade" tag="ul" class="list-unstyled">
+						<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
+								  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
+					</transition-group>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -89,15 +87,6 @@
 				}
 				return total;
 			}
-		},
-		
-		created() {
-			// seed one empty attendee to each cart item
-			/*for (let i = 0; i < this.items.length; ++i) {
-				if (this.items[i].attendees.length === 0) {
-					this.addAttendee(i);
-				}
-			}*/
 		}
 	}
 </script>
@@ -108,5 +97,19 @@
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		color: #2c3e50;
+	}
+
+	.cart-item {
+		display: block;
+		transition: all .3s;
+	}
+
+	.slide-fade-enter, .slide-fade-leave-to {
+		opacity: 0;
+		transform: translateX(-100%);
+	}
+
+	.slide-fade-leave-active {
+		position: absolute;
 	}
 </style>

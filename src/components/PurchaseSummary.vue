@@ -43,20 +43,20 @@
 					<p v-else-if="!this.items.length" class="text-danger">Your cart is empty</p>
 					<hr>
 
-					<button type="button" class="btn btn-primary col-md-12 pay-online" :disabled="!readyToPay">
+					<button type="button" class="btn btn-primary col-xs-12 pay-online" :disabled="!readyToPay">
 						<span class="fa fa-lock"></span> PAY ONLINE
 					</button>
 
 					<div class="text-center">&mdash; OR &mdash;</div>
 					
-					<button type="button" class="btn btn-inverse col-md-12 pay-offline" :disabled="!readyToPay">
+					<button type="button" class="btn btn-inverse col-xs-12 pay-offline" :disabled="!readyToPay">
 						<span class="fa fa-envelope-o"></span> PAY OFFLINE
 					</button>
 				</div>
 			</div>
 		</div>
 
-		<button type="button" class="btn btn-default col-md-12 save"><strong>SAVE</strong> AND CONTINUE SHOPPING</button>
+		<button type="button" class="btn btn-default col-xs-12 save"><strong>SAVE</strong> AND CONTINUE SHOPPING</button>
 	</div>
 </template>
 
