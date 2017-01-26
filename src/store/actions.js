@@ -18,7 +18,6 @@ export default {
 	},
 
 	moveToWishList(context, index) {
-		// TODO: detect when course already exists in wish list, ask if they want to remove from cart?
 		context.commit(types.MOVE_TO_WISHLIST, index);
 	},
 
@@ -31,8 +30,6 @@ export default {
 	},
 
 	setOffering(context, { itemIndex, offeringId }) {
-		console.log(itemIndex)
-		console.log(offeringId)
 		context.commit(types.SET_OFFERING, { itemIndex, offeringId });
 	}
 }

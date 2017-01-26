@@ -1,5 +1,5 @@
 <template>
-	<li>
+	
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="pull-right">
@@ -22,7 +22,7 @@
 				<div class="clearfix">
 					<div class="pull-left">
 						<a href="#" class="" @click="copyItemClick($event, index)">
-							<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add Another<!-- Date/Location or Attendee for this course-->
+							<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add Another
 						</a>
 					</div>
 
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 		</div>
-	</li>
+	
 </template>
 
 <script>
@@ -65,20 +65,21 @@
 		},
 
 		computed: {
+			// TODO: get rid of this coupling and put methods in a shared service class
 			selectedOffering() {
-				return this.$parent.selectedOffering(this.item);
+				return this.$parent.$parent.selectedOffering(this.item);
 			},
 
 			price() {
-				return this.$parent.itemPrice(this.item);
+				return this.$parent.$parent.itemPrice(this.item);
 			},
 
 			selectedDiscounts() {
-				return this.$parent.selectedDiscounts(this.item);
+				return this.$parent.$parent.selectedDiscounts(this.item);
 			},
 
 			itemSubtotal() {
-				return this.$parent.itemSubtotal(this.item);
+				return this.$parent.$parent.itemSubtotal(this.item);
 			},
 
 			/**
@@ -112,11 +113,29 @@
 
 			moveToWishListClick(e, index) {
 				e.preventDefault();
-				this.$store.dispatch('moveToWishList', index);
+				// detect when course already exists in wish list, ask if still want to remove from cart
+				let id = this.items[index].id;
+				if (this.wishList.findIndex((i) => i.id === id) !== -1) {
+					// offer choice to remove with modal, do this on "yes"
+					BootstrapDialog.confirm({
+						title: 'Move to Wish List',
+						message: '<p>This course is already in your Wish List.</p><p>Do you still want to remove it from your cart?</p>',
+						btnOKLabel: 'Yes, remove it',
+						btnCancelLabel: 'No',
+						callback: (result) => {
+							if (result) {
+								this.$store.dispatch('removeFromCart', index);
+							}
+						}
+					});
+				}
+				else {
+					this.$store.dispatch('moveToWishList', index);
+				}
 			},
 
 			selectedOfferingText() {
-				return this.$parent.selectedOfferingText(this.item);
+				return this.$parent.$parent.selectedOfferingText(this.item);
 			},
 
 			discountAmount(discount) {

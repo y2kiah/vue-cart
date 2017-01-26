@@ -14,8 +14,10 @@
 			<div class="col-md-8 clearfix">
 				<div id="cartItems">
 					<ul class="list-unstyled">
-						<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
-								  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
+						<transition-group name="itemsTransition" tag="li">
+							<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
+									  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
+						</transition-group>
 					</ul>
 				</div>
 			</div>
@@ -53,6 +55,7 @@
 		},
 
 		methods: {
+			// TODO: move these to shared service class
 			selectedOffering(item) {
 				let o = item.offerings.find((o) => { return o.id === item.selectedOfferingId; });
 				return o || null;
@@ -85,10 +88,6 @@
 					total += this.itemSubtotal(item);
 				}
 				return total;
-			},
-
-			allItemsValid() {
-				return (this.items.findIndex((i) => i.selectedOfferingId === null) === -1);
 			}
 		},
 		

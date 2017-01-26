@@ -12,30 +12,57 @@
 					</div>
 				</li>
 			</ul>
-			<div v-if="$parent.allItemsValid()" class="panel panel-default">
+			<div class="panel panel-default">
+				<div class="panel-heading coupons">
+					<label for="coupon">Coupons</label>
+					<div class="input-group">
+						<input type="text" name="coupon" id="coupon" class="form-control" v-model="couponCode" placeholder="Enter coupon code">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default">Apply</button>
+						</span>
+					</div>
+				</div>
 				<div class="panel-body">
-					<div class="clearfix">
-						<h4 class="pull-left">Subtotal:</h4>
-						<span class="pull-right">{{ purchaseSubtotal }}</span>
+					<div v-if="allOfferingsSelected && this.items.length" style="margin-bottom:5px;">
+						<div class="clearfix">
+							<h4 class="pull-left subtotal">Subtotal:</h4>
+							<span class="pull-right">{{ purchaseSubtotal }}</span>
+						</div>
+						
+						<div class="clearfix">
+							<hr>
+							<h4 class="pull-left total">Purchase Total:</h4>
+							<span class="pull-right total">{{ purchaseTotal }}</span>
+						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="coupon">Coupon Code</label>
-						<input type="text" name="coupon" id="coupon" class="form-control" v-model="couponCode" placeholder="Enter code">
-					</div>
+					<p v-if="this.items.length && !readyToPay" class="text-danger">
+						<span class="fa fa-warning"></span>
+						Please provide all required information
+					</p>
+					<p v-else-if="!this.items.length" class="text-danger">Your cart is empty</p>
+					<hr>
 
-					<div class="clearfix">
-						<h4 class="pull-left total">Purchase Total:</h4>
-						<span class="pull-right">{{ purchaseTotal }}</span>
-					</div>
+					<button type="button" class="btn btn-primary col-md-12 pay-online" :disabled="!readyToPay">
+						<span class="fa fa-lock"></span> PAY ONLINE
+					</button>
+
+					<div class="text-center">&mdash; OR &mdash;</div>
+					
+					<button type="button" class="btn btn-inverse col-md-12 pay-offline" :disabled="!readyToPay">
+						<span class="fa fa-envelope-o"></span> PAY OFFLINE
+					</button>
 				</div>
 			</div>
 		</div>
-		<button type="button" class="btn btn-default col-md-12 save">SAVE AND CONTINUE SHOPPING</button>
+
+		<button type="button" class="btn btn-default col-md-12 save"><strong>SAVE</strong> AND CONTINUE SHOPPING</button>
 	</div>
 </template>
 
 <script>
+	import { mapGetters } from 'vuex';
+
 	export default {
 		name: 'PurchaseSummary',
 
@@ -48,6 +75,8 @@
 		},
 
 		computed: {
+			...mapGetters([ 'allOfferingsSelected', 'readyToPay' ]),
+
 			purchaseSubtotal() {
 				let subtotal = this.$parent.purchaseSubtotal();
 				return accounting.formatMoney(subtotal);
@@ -82,6 +111,11 @@
 		margin: 0 0 10px 0;
 	}
 	
+	hr {
+		margin: 10px 0;
+		border-color: #ccc;
+	}
+
 	@media(max-width:767px) {
 		#purchaseSummary.affix,
 		#purchaseSummary.affix-top,
@@ -115,8 +149,20 @@
 		text-align: center;
 		white-space: normal;
 
+		&.pay-online, &.pay-offline {
+			letter-spacing: 0.07em;
+		}
+
 		&.save {
 			margin-bottom: 15px;
+			color: #2e6da4;
+			border-color: #2e6da4;
+		}
+
+		&.btn-inverse {
+			color: #fff;
+			background-color: #333;
+			border-color: #333;
 		}
 	}
 
@@ -125,7 +171,18 @@
 		vertical-align: bottom;
 	}
 
+	.subtotal {
+		margin: 0;
+	}
+
 	.total {
 		font-weight: bold;
+		font-size: 18px;
+		margin: 0;
+		line-height: 1.1;
+	}
+
+	.panel-default > .panel-heading.coupons {
+		background-color: #fafafa;
 	}
 </style>
