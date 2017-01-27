@@ -1,6 +1,9 @@
 <template>
 	<div :class="['panel', 'panel-default', { 'panel-success': collapsed }]">
 		<div class="panel-heading">
+			<a v-if="enteringNew || editing" href="#" class="text-danger pull-right"
+					@click.prevent="resetAttendeeClick"><i class="glyphicon glyphicon-remove"></i> Choose a different Attendee</a>
+
 			<h4 class="panel-title" v-if="collapsed">Attendee</h4>
 			<h4 class="panel-title" v-else-if="enteringNew">Add a New Attendee</h4>
 			<h4 class="panel-title" v-else-if="editing">Edit Attendee</h4>
@@ -21,29 +24,34 @@
 						</div>
 						<div v-show="!collapsed">
 							<div v-if="!enteringNew && !editing">
-								
 								<div class="row">
-									<div class="col-lg-4 col-md-6" v-if="!attendeeAlreadyExistsForCourse(user.email)">
-										<button class="btn btn-default col-xs-12 user-selection" type="button"
-												@click="setAttendeeClick(user)">
+									<div class="col-lg-4 col-md-6">
+										<button :class="['btn', 'btn-default', 'col-xs-12', 'attendee-selection',
+														 { registered: attendeeRegisteredForCourse(user) }]"
+												:disabled="attendeeRegisteredForCourse(user)"
+												@click="setAttendeeClick(user)" type="button">
 											<span class="text-success"><strong>REGISTER MYSELF</strong></span><br>
 											{{ user.firstname }} {{ user.lastname }}<br>
 											{{ user.email }}
+											<span v-if="attendeeRegisteredForCourse(user)" class="registered-icon fa fa-check fa-2x"></span>
 										</button>
 									</div>
 									<div class="col-lg-4 col-md-6">
-										<button class="btn btn-default col-xs-12 user-selection new-attendee" type="button"
+										<button class="btn btn-default col-xs-12 attendee-selection new-attendee" type="button"
 												@click="enterNewAttendeeClick">
 											<span class="text-muted"><strong>ADD A NEW ATTENDEE</strong></span><br>
-											<span class="lead text-muted glyphicon glyphicon-plus-sign"></span>
+											<span class="text-muted fa fa-plus-circle fa-3x"></span>
 										</button>
 									</div>
 									<div v-for="att in attendeeChoices" :key="att.email" class="col-lg-4 col-md-6">
-										<button class="btn btn-default col-xs-12 user-selection exiting-attendee" type="button"
-												@click="setAttendeeClick(att)">
+										<button :class="['btn', 'btn-default', 'col-xs-12', 'attendee-selection', 'existing-attendee',
+														 { registered: attendeeRegisteredForCourse(att) }]"
+												:disabled="attendeeRegisteredForCourse(att)"
+												@click="setAttendeeClick(att)" type="button">
 											<span class="text-info"><strong>REGISTER ATTENDEE</strong></span><br>
 											{{ att.firstname }} {{ att.lastname }}<br>
 											{{ att.email }}
+											<span v-if="attendeeRegisteredForCourse(att)" class="registered-icon fa fa-check fa-2x"></span>
 										</button>
 									</div>
 								</div>
@@ -163,8 +171,6 @@
 
 									<button type="submit" class="btn btn-primary">Save Changes</button>
 									<button type="button" class="btn btn-default" @click="cancelClick" v-if="editing">Cancel</button>
-									<button type="button" class="btn btn-danger pull-right"
-											@click="resetAttendeeClick">Reset</button>
 								</form>
 							</div>
 						</div>
@@ -284,7 +290,7 @@
 					else {
 						// scroll up to top of containing li
 						if (this.editing || this.enteringNew) {
-							scrollUpTo($(this.$el).closest('li'));
+							scrollUpTo($(this.$el).closest('li'), 100);
 						}
 
 						this.$store.dispatch('updateAttendee', {
@@ -317,7 +323,7 @@
 			cancelClick() {
 				// scroll up to top of containing li
 				if (this.editing || this.enteringNew) {
-					scrollUpTo($(this.$el).closest('li'));
+					scrollUpTo($(this.$el).closest('li'), 100);
 				}
 
 				this.copyAttendeeToForm(this.attendee);
@@ -329,12 +335,6 @@
 			},
 
 			resetAttendeeClick() {
-				// scroll up to top of containing li
-				if (this.editing || this.enteringNew) {
-					console.log($(this.$el).closest('li'))
-					scrollUpTo($(this.$el).closest('li'));
-				}
-
 				this.$store.dispatch('setAttendee', {
 					itemIndex: this.itemIndex
 				})
@@ -366,22 +366,29 @@
 				this.enteringNew = true;
 			},
 
-			attendeeAlreadyExistsForCourse(attendee) {
-				return (this.items.findIndex((item) => { item !== this.item && item.attendee === attendee }) !== -1);
-			},
-
 			copyAttendeeToForm(attendee) {
 				_.forOwn(attendee, (value, key) => {
 					if (_.has(this.form, key)) {
 						this.form[key] = value;
 					}
 				});
+			},
+
+			/**
+			 * Check if attendee is already registered for the course in another cart item
+			 */
+			attendeeRegisteredForCourse(attendee) {
+				return (this.items.findIndex((i) =>
+							i !== this.item            // not this item
+							&& i.id === this.item.id   // same course
+							&& i.attendee === attendee // same attendee
+						) !== -1);
 			}
 		}
 	};
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 	.panel-title {
 		font-size: 18px;
 	}
@@ -399,18 +406,34 @@
 		border-color: inherit;
 	}
 
-	li.attendee {
-		border-top: 1px solid #ccc;
-		margin: 5px 0;
-	}
-
-	button.user-selection {
+	button.attendee-selection {
 		text-align: left;
 		margin: 5px 0;
 		height: 74px;
 		overflow: hidden;
 		white-space: nowrap;
+		position: relative;
+
+		$registered-bg: #6f5499;
+		$registered-col: darken($registered-bg, 20%);
+
+		&.registered {
+			background-color: $registered-bg;
+			color: $registered-col;
+
+			> .text-success, > .text-info {
+				color: $registered-col;
+			}
+
+			> .registered-icon {
+				color: #fff;
+				position: absolute;
+				right: 5px;
+				top: 5px;
+			}
+		}
 	}
+
 	button.new-attendee {
 		text-align: center;
 	}

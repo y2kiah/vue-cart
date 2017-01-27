@@ -53,7 +53,7 @@ export default {
 			copy.selectedOfferingId = copy.offerings[0].id;
 		}
 		
-		state.items.unshift(copy);
+		state.items.splice(index + 1, 0, copy);
 	},
 
 	[types.MOVE_TO_CART](state, index) {

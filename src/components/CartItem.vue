@@ -22,7 +22,7 @@
 				<div class="clearfix">
 					<div class="pull-left">
 						<a href="#" class="" @click="copyItemClick($event, index)">
-							<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add Another
+							<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add Another Attendee
 						</a>
 					</div>
 
@@ -47,7 +47,7 @@
 	import Attendee from './Attendee';
 	import Note from './Note';
 	import CalculationService from '../CalculationService';
-	import { scrollUpTo } from '../helpers';
+	import { scrollDownTo } from '../helpers';
 
 	const calculationService = new CalculationService();
 
@@ -102,8 +102,11 @@
 
 			copyItemClick(e, index) {
 				e.preventDefault();
-				scrollUpTo($('#cartItems li:first'));
-				this.$store.dispatch('copyCartItem', index);
+				
+				this.$store.dispatch('copyCartItem', index)
+				.then(() => {
+					scrollDownTo($(this.$el).next(), 100);
+				})
 			},
 
 			removeItemClick(e, index) {
