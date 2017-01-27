@@ -82,6 +82,10 @@ export default {
 				attendee[key] = value;
 			}
 		});
+
+		if (attendee === state.user) {
+			state.userInfoVerified = true;
+		}
 	},
 
 	[types.SET_OFFERING](state, { itemIndex, offeringId }) {

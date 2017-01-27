@@ -1,12 +1,13 @@
 <template>
 	<li class="cart-item">
-		<div class="panel panel-default">
+		<div :class="[ 'panel', 'panel-default', { valid } ]">
+			<i :class="['panel-indicator', 'fa', 'fa-2x', { 'fa-check-circle': valid, 'fa-exclamation-circle': !valid }]"></i>
 			<div class="panel-body">
 				<div class="pull-right">
 					<a href="#" class="wish-list" @click="moveToWishListClick($event, index)">
 						<i class="glyphicon glyphicon glyphicon-heart-empty"></i> Save for later
 					</a>
-					<a href="#" @click="removeItemClick($event, index)">
+					<a href="#" @click="removeItemClick($event, index)" class="text-danger">
 						<i class="glyphicon glyphicon-remove"></i> Delete
 					</a>
 				</div>
@@ -65,6 +66,11 @@
 		},
 
 		computed: {
+			valid() {
+				return this.item.selectedOfferingId !== null
+						&& this.item.attendee.email !== "";
+			},
+
 			// TODO: get rid of this coupling and put methods in a shared service class
 			selectedOffering() {
 				return this.$parent.$parent.selectedOffering(this.item);
@@ -148,7 +154,7 @@
 	};
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 	a.wish-list {
 		margin-right: 30px;
 	}
@@ -163,5 +169,30 @@
 	}
 	.price > span {
 		margin-right: 15px;
+	}
+
+	li.cart-item > .panel > .panel-indicator {
+		position: absolute;
+		top: 30px;
+		left: -13px;
+		background-color: #fff;
+	}
+
+	li.cart-item > .panel {
+		border-radius: 0 4px 4px 0;
+		border-left: 3px solid #ce4844;
+		position: relative;
+
+		& > .panel-indicator {
+			color: #ce4844;
+		}
+	}
+
+	li.cart-item > .panel.valid {
+		border-left: 3px solid #3c763d;
+
+		& > .panel-indicator {
+			color: #3c763d;
+		}
 	}
 </style>

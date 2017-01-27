@@ -89,7 +89,9 @@ const store = new Vuex.Store({
 			state: "FL",
 			zip: "32114",
 			country: "United States of America"
-		}
+		},
+
+		userInfoVerified: false
 	},
 
 	actions,
