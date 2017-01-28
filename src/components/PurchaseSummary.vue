@@ -43,13 +43,15 @@
 					<p v-else-if="!this.items.length" class="text-danger">Your cart is empty</p>
 					<hr>
 
-					<button type="button" class="btn btn-primary col-xs-12 pay-online" :disabled="!readyToPay">
+					<button type="button" class="btn btn-primary col-xs-12 pay-online" :disabled="!readyToPay"
+							@click="payOnlineClick">
 						<span class="fa fa-lock"></span> PAY ONLINE
 					</button>
 
 					<div class="text-center">&mdash; OR &mdash;</div>
 					
-					<button type="button" class="btn btn-inverse col-xs-12 pay-offline" :disabled="!readyToPay">
+					<button type="button" class="btn btn-inverse col-xs-12 pay-offline" :disabled="!readyToPay"
+							@click="payOfflineClick">
 						<span class="fa fa-envelope-o"></span> PAY OFFLINE
 					</button>
 				</div>
@@ -61,7 +63,7 @@
 </template>
 
 <script>
-	import { mapGetters } from 'vuex';
+	import { mapState, mapGetters } from 'vuex';
 
 	export default {
 		name: 'PurchaseSummary',
@@ -75,7 +77,11 @@
 		},
 
 		computed: {
-			...mapGetters([ 'allOfferingsSelected', 'readyToPay' ]),
+			...mapState([ 'userInfoVerified' ]),
+
+			...mapGetters([ 'allOfferingsSelected',
+							'readyToPay'
+						  ]),
 
 			purchaseSubtotal() {
 				let subtotal = this.$parent.purchaseSubtotal();
@@ -101,6 +107,18 @@
 			itemSubtotal(item) {
 				let subtotal = this.$parent.itemSubtotal(item);
 				return accounting.formatMoney(subtotal);
+			},
+
+			payOnlineClick(e) {
+				if (!this.userInfoVerified) {
+					// TODO: verify info, need the modal
+				}
+			},
+
+			payOfflineClick(e) {
+				if (!this.userInfoVerified) {
+					// TODO: verify info, need the modal
+				}
 			}
 		}
 	};

@@ -74,7 +74,6 @@ const store = new Vuex.Store({
 		coupons: [],
 
 		user: {
-			authenticated: true,
 			firstname: "Jeff",
 			middleinitial: "J",
 			lastname: "Kiah",

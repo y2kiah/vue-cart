@@ -79,21 +79,7 @@
 
 			itemsForCourse() {
 				return this.items.filter((i) => (i.id === this.item.id));
-			},
-
-			/**
-			 * Offerings that have not been selected in another item for the same course.
-			 */
-			/*unselectedOfferings() {
-				let otherOfferingIds = this.items
-					.filter((i) => (i.id === this.item.id && i.uniqueId !== this.item.uniqueId && i.selectedOfferingId !== null))
-					.map(i => i.selectedOfferingId);
-				
-				let unselected = this.item.offerings
-					.filter((o, idx) => otherOfferingIds.indexOf(idx) === -1 );
-				
-				return unselected;
-			}*/
+			}
 		},
 
 		methods: {

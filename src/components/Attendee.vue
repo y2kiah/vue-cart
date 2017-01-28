@@ -64,7 +64,11 @@
 											<h4 class="modal-title" v-else>Edit Attendee</h4>
 										</div>
 										<div class="modal-body">
-										
+											<!--<ul class="nav nav-pills">
+												<li role="presentation" class="active"><a href="#">Attendee</a></li>
+												<li role="presentation"><a href="#">Organization</a></li>
+											</ul>-->
+
 											<div class="row">
 												<div :class="['form-group', 'col-md-5', {'has-error': errors.has('form.firstname',formScope)}]">
 													<label class="control-label" :for="'firstname_'+itemIndex">First Name</label>
@@ -439,10 +443,6 @@
 	.panel-footer {
 		background-color: inherit;
 		border-color: inherit;
-	}
-
-	.panel, .panel-heading, .panel-footer, .panel-body {
-		transition: background-color .3s;
 	}
 
 	button.attendee-selection {

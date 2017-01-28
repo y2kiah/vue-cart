@@ -195,4 +195,8 @@
 			color: #3c763d;
 		}
 	}
+
+	.panel, .panel-heading, .panel-footer, .panel-body {
+		transition: background-color .3s;
+	}
 </style>
