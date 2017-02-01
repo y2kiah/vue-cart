@@ -1,5 +1,5 @@
 <template>
-	<li class="wish-list-item">
+	<li class="wish-list-item clearfix">
 		<h4 class="pull-left"><a href="#" @click.prevent>{{ item.name }}</a></h4>
 		<ul class="list-inline pull-right">
 			<li><a href="#" @click.prevent="moveToCart"><i class="glyphicon glyphicon-shopping-cart"></i>+ Move to cart</a></li>

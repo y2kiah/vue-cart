@@ -11,8 +11,7 @@
 		<div class="row">
 			<div class="col-md-8 clearfix">
 				<div id="cartItems">
-					<transition-group name="slide-fade" tag="ul" class="list-unstyled"
-							v-on:before-leave="leaving=true" v-on:after-leave="leaving=false" v-on:leave-cancelled="leaving=false">
+					<transition-group name="slide-fade" tag="ul" class="list-unstyled">
 						<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
 								  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
 					</transition-group>
@@ -24,7 +23,7 @@
 		</div>
 		
 		<transition name="fade">
-			<div id="wishListItems" class="row" v-if="wishList.length && !leaving">
+			<div id="wishListItems" class="row" v-if="wishList.length">
 				<div class="col-md-8 clearfix">
 					<h3>Wish list items ({{ wishList.length }})</h3>
 					<transition-group name="slide-fade" tag="ul" class="list-unstyled">
@@ -133,16 +132,16 @@
 
 	.slide-fade-leave-active {
 		position: absolute;
-		transition: all .4s;
+		transition: all 4s;
 	}
 
 	.slide-fade-leave-active:last-child {
 		position: inherit;
-		transition: all .4s;
+		transition: all 4s;
 	}
 
 	.slide-fade-enter-active, .slide-fade-move {
-		transition: all .4s;
+		transition: all 4s;
 	}
 
 	/* fade transition */
