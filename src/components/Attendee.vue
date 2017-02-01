@@ -86,14 +86,14 @@
 												</div>
 											</div>
 											<div class="row">
-												<div :class="['form-group', 'col-md-4', {'has-error': errors.has('form.email',formScope)}]">
+												<div :class="['form-group', 'col-md-6', {'has-error': errors.has('form.email',formScope)}]">
 													<label class="control-label" :for="'email_'+itemIndex">Email</label>
 													<input type="text" name="form.email" :id="'email_'+itemIndex" class="form-control"
 														   v-model="form.email" v-validate="form.email" data-vv-rules="required|email" data-vv-as="email">
 
 													<span v-show="errors.has('form.email',formScope)" class="help-block">{{ errors.first('form.email',formScope) }}</span>
 												</div>
-												<div :class="['form-group', 'col-md-4', {'has-error': errors.has('form.phone',formScope)}]">
+												<div :class="['form-group', 'col-md-6', {'has-error': errors.has('form.phone',formScope)}]">
 													<label class="control-label" :for="'phone_'+itemIndex">Phone</label>
 													<input type="text" name="form.phone" :id="'phone_'+itemIndex" class="form-control"
 														   v-model="form.phone" v-validate="form.phone" data-vv-rules="required" data-vv-as="phone number">
@@ -102,14 +102,14 @@
 												</div>
 											</div>
 											<div class="row">
-												<div :class="['form-group', 'col-md-4', {'has-error': errors.has('form.dob',formScope)}]">
+												<div :class="['form-group', 'col-md-6', {'has-error': errors.has('form.dob',formScope)}]">
 													<label class="control-label" :for="'dob_'+itemIndex">Date of Birth</label>
 													<input type="text" name="form.dob" :id="'dob_'+itemIndex" class="form-control"
 														   v-model="form.dob" v-validate="form.dob" data-vv-rules="required|date_format:MM/DD/YYYY" placeholder="MM/DD/YYYY" data-vv-as="date of birth">
 
 													<span v-show="errors.has('form.dob',formScope)" class="help-block">{{ errors.first('form.dob',formScope) }}</span>
 												</div>
-												<div :class="['form-group', 'col-md-4', {'has-error': errors.has('form.erauid',formScope)}]">
+												<div :class="['form-group', 'col-md-6', {'has-error': errors.has('form.erauid',formScope)}]">
 													<label class="control-label" :for="'erauid_'+itemIndex">ERAU ID (optional)</label>
 													<input type="text" name="form.erauid" :id="'erauid_'+itemIndex" class="form-control"
 														   v-model="form.erauid" v-validate="form.erauid" data-vv-rules="digits:7" maxlength="7" data-vv-as="ERAU ID">

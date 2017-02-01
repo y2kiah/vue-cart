@@ -11,10 +11,14 @@
 		<div class="row">
 			<div class="col-md-8 clearfix">
 				<div id="cartItems">
-					<transition-group name="slide-fade" tag="ul" class="list-unstyled">
+					<transition-group name="slide-fade" tag="ul" class="list-unstyled"
+							v-on:before-leave="beforeLeave"
+							v-on:after-leave="afterLeave"
+							v-on:leave-cancelled="afterLeave">
 						<CartItem v-for="(item, index) in items" :key="item.uniqueId" :item="item" :index="index"
 								  :items="items" :discounts="discounts" :wishList="wishList" :user="user"></CartItem>
 					</transition-group>
+					<div id="leaveMargin" style="height:0;"></div>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -27,7 +31,8 @@
 				<div class="col-md-8 clearfix">
 					<h3>Wish list items ({{ wishList.length }})</h3>
 					<transition-group name="slide-fade" tag="ul" class="list-unstyled">
-						<WishListItem v-for="(item, index) in wishList" :key="item.id" :item="item" :index="index"></WishListItem>
+						<WishListItem v-for="(item, index) in wishList" :key="item.id" :item="item" :index="index"
+								:items="items" :wishList="wishList"></WishListItem>
 					</transition-group>
 				</div>
 			</div>
@@ -58,11 +63,23 @@
 
 		data() {
 			return {
-				leaving: false
 			};
 		},
 
 		methods: {
+			beforeLeave(el) {
+				let height = $(el).outerHeight(true) + 10; // height of li plus ul margin
+				let $leaveMargin = $('#leaveMargin');
+				$leaveMargin.removeClass('slide');
+				$leaveMargin.css('height', height + 'px');
+			},
+			
+			afterLeave(el) {
+				let $leaveMargin = $('#leaveMargin');
+				$leaveMargin.addClass('slide');
+				$leaveMargin.css('height', 0);
+			},
+
 			// TODO: move these to shared service class
 			selectedOffering(item) {
 				let o = item.offerings.find((o) => o.id === item.selectedOfferingId);
@@ -109,13 +126,14 @@
 		color: #2c3e50;
 	}
 
-	#wishListItems {
+	#leaveMargin.slide {
+		transition: height .4s;
+	}
 
+	#wishListItems {
 	}
 
 	.cart-item {
-		/*position: relative;
-		z-index: 2;*/
 	}
 
 	.wish-list-item {
@@ -132,16 +150,13 @@
 
 	.slide-fade-leave-active {
 		position: absolute;
-		transition: all 4s;
-	}
-
-	.slide-fade-leave-active:last-child {
-		position: inherit;
-		transition: all 4s;
+		left: 15px;
+		right: 15px;
+		transition: all .4s;
 	}
 
 	.slide-fade-enter-active, .slide-fade-move {
-		transition: all 4s;
+		transition: all .4s;
 	}
 
 	/* fade transition */

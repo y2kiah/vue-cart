@@ -21,6 +21,10 @@ export default {
 		context.commit(types.MOVE_TO_WISHLIST, index);
 	},
 
+	removeFromWishList(context, index) {
+		context.commit(types.REMOVE_FROM_WISHLIST, index);
+	},
+
 	setAttendee(context, { itemIndex, attendee }) {
 		context.commit(types.SET_ATTENDEE, { itemIndex, attendee });
 	},

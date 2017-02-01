@@ -58,12 +58,31 @@ export default {
 
 	[types.MOVE_TO_CART](state, index) {
 		let i = state.wishList.splice(index, 1);
-		state.items.push(i[0]);
+		let item = i[0];
+		item.uniqueId = nextItemId++;
+		item.attendee = makeAttendee();
+		item.selectedOfferingId = null;
+
+		// pre-select offering when only one is available
+		if (item.offerings.length === 1) {
+			item.selectedOfferingId = item.offerings[0].id;
+		}
+
+		state.items.push(item);
 	},
 
 	[types.MOVE_TO_WISHLIST](state, index) {
 		let i = state.items.splice(index, 1);
-		state.wishList.push(i[0]);
+		let item = i[0];
+		delete item.uniqueId;
+		item.attendee = makeAttendee();
+		item.seletedOfferingId = null;
+
+		state.wishList.push(item);
+	},
+
+	[types.REMOVE_FROM_WISHLIST](state, index) {
+		state.wishList.splice(index, 1);
 	},
 
 	[types.SET_ATTENDEE](state, { itemIndex, attendee }) {

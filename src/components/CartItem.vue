@@ -4,17 +4,17 @@
 			<i :class="['panel-indicator', 'fa', 'fa-2x', { 'fa-check-circle': valid, 'fa-exclamation-circle': !valid }]"></i>
 			<div class="panel-body">
 				<div class="pull-right">
-					<a href="#" class="wish-list" @click="moveToWishListClick($event, index)">
+					<a href="#" class="wish-list" @click="moveToWishListClick($event)">
 						<i class="glyphicon glyphicon glyphicon-heart-empty"></i> Move to wish list
 					</a>
-					<a href="#" @click="removeItemClick($event, index)" class="text-danger">
+					<a href="#" @click="removeItemClick($event)" class="text-danger">
 						<i class="glyphicon glyphicon-remove"></i> Delete
 					</a>
 				</div>
 				
 				<h4>ITEM {{ index+1 }}</h4>
 
-				<h2><a href="#" @click.prevent>{{item.name}}</a></h2>
+				<h2><a href="#" @click.prevent>{{ item.name }}</a></h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts"></CourseOfferings>
 
@@ -22,7 +22,7 @@
 
 				<div class="clearfix">
 					<div class="pull-left">
-						<a href="#" class="" @click="copyItemClick($event, index)">
+						<a href="#" class="" @click="copyItemClick($event)">
 							<i class="glyphicon glyphicon glyphicon-shopping-cart"></i>+ Add Another Attendee
 						</a>
 					</div>
@@ -105,24 +105,24 @@
 				return accounting.formatMoney(amount);
 			},
 
-			copyItemClick(e, index) {
+			copyItemClick(e) {
 				e.preventDefault();
 				
-				this.$store.dispatch('copyCartItem', index)
+				this.$store.dispatch('copyCartItem', this.index)
 				.then(() => {
 					scrollDownTo($(this.$el).next(), 100);
-				})
+				});
 			},
 
-			removeItemClick(e, index) {
+			removeItemClick(e) {
 				e.preventDefault();
-				this.$store.dispatch('removeFromCart', index);
+				this.$store.dispatch('removeFromCart', this.index);
 			},
 
-			moveToWishListClick(e, index) {
+			moveToWishListClick(e) {
 				e.preventDefault();
 				// detect when course already exists in wish list, ask if still want to remove from cart
-				let id = this.items[index].id;
+				let id = this.items[this.index].id;
 				if (this.wishList.findIndex((i) => i.id === id) !== -1) {
 					// offer choice to remove with modal, do this on "yes"
 					BootstrapDialog.confirm({
@@ -132,13 +132,13 @@
 						btnCancelLabel: 'No',
 						callback: (result) => {
 							if (result) {
-								this.$store.dispatch('removeFromCart', index);
+								this.$store.dispatch('removeFromCart', this.index);
 							}
 						}
 					});
 				}
 				else {
-					this.$store.dispatch('moveToWishList', index);
+					this.$store.dispatch('moveToWishList', this.index);
 				}
 			},
 
