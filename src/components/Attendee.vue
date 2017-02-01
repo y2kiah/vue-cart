@@ -64,11 +64,6 @@
 											<h4 class="modal-title" v-else>Edit Attendee</h4>
 										</div>
 										<div class="modal-body">
-											<!--<ul class="nav nav-pills">
-												<li role="presentation" class="active"><a href="#">Attendee</a></li>
-												<li role="presentation"><a href="#">Organization</a></li>
-											</ul>-->
-
 											<div class="row">
 												<div :class="['form-group', 'col-md-5', {'has-error': errors.has('form.firstname',formScope)}]">
 													<label class="control-label" :for="'firstname_'+itemIndex">First Name</label>
@@ -261,6 +256,11 @@
 			}
 		},
 
+		mounted() {
+			// move the modal to the body, so the z-index of .cart-item does not affect it
+			//$('#attendee-form-'+this.itemIndex).appendTo('body');
+		},
+
 		methods: {
 			// temporary fix for bug in vee-validate
 			validateAll(scope) {
@@ -294,6 +294,8 @@
 				let v = this.validateAll(scope);
 				
 				v.then(a => {
+					let $attendeeForm = $('#attendee-form-' + this.itemIndex);
+
 					if (this.errors.any(scope)) {
 						let errorFields = _.keys(this.errors.collect());
 						let sel = errorFields.map(val => { return '[name="'+val+'"]'; }).join(",");
@@ -302,7 +304,7 @@
 						this.editing = (!this.editing && !this.enteringNew ? true : this.editing);
 						this.enteringNew = (!this.editing && !this.enteringNew ? false : this.enteringNew);
 
-						$(sel, this.$el).first().focus();
+						$(sel, $attendeeForm).first().focus();
 					}
 					else {
 						this.$store.dispatch('updateAttendee', {
@@ -310,7 +312,7 @@
 							data: this.form
 						})
 						.then(() => {
-							$('#attendee-form-' + this.itemIndex).modal('hide');
+							$attendeeForm.modal('hide');
 
 							this.collapsed = true;
 							this.editing = false;

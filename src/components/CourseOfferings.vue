@@ -54,6 +54,7 @@
 <script>
 	export default {
 		name: 'CourseOfferings',
+		
 		props: [ 'item', 'index', 'items', 'discounts' ],
 
 		data () {

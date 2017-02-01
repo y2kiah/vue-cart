@@ -5,7 +5,7 @@
 			<div class="panel-body">
 				<div class="pull-right">
 					<a href="#" class="wish-list" @click="moveToWishListClick($event, index)">
-						<i class="glyphicon glyphicon glyphicon-heart-empty"></i> Save for later
+						<i class="glyphicon glyphicon glyphicon-heart-empty"></i> Move to wish list
 					</a>
 					<a href="#" @click="removeItemClick($event, index)" class="text-danger">
 						<i class="glyphicon glyphicon-remove"></i> Delete
@@ -14,7 +14,7 @@
 				
 				<h4>ITEM {{ index+1 }}</h4>
 
-				<h2>{{item.name}}</h2>
+				<h2><a href="#" @click.prevent>{{item.name}}</a></h2>
 
 				<CourseOfferings :item="item" :index="index" :items="items" :discounts="discounts"></CourseOfferings>
 
@@ -46,7 +46,6 @@
 <script>
 	import CourseOfferings from './CourseOfferings';
 	import Attendee from './Attendee';
-	import Note from './Note';
 	import CalculationService from '../CalculationService';
 	import { scrollDownTo } from '../helpers';
 
@@ -57,7 +56,7 @@
 
 		props: [ 'item', 'index', 'items', 'discounts', 'wishList', 'user' ],
 
-		components: { CourseOfferings, Attendee, Note },
+		components: { CourseOfferings, Attendee },
 
 		data() {
 			return {
